@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organización 3J — Torneos de Pádel</title>
+<link rel="icon" type="image/png" href="logo-3j.png">
+<link rel="apple-touch-icon" href="logo-3j.png">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Organización 3J — Torneos de Pádel</title>
+<link rel="icon" type="image/png" href="logo-3j.png">
+<link rel="shortcut icon" type="image/png" href="logo-3j.png">
+<link rel="apple-touch-icon" href="logo-3j.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --accent:#FFD400; --ink:#0A0A0A; }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;}
+  @keyframes pulse3j{0%,100%{opacity:1}50%{opacity:.25}}
+  @keyframes scrollx{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  ::-webkit-scrollbar{width:7px;}
+  ::-webkit-scrollbar-track{background:#0A0A0A;}
+  ::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:4px;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:.01ms!important;transition-duration:.01ms!important;} }
+  /* fixed backgrounds se rompen en iOS/móvil → pasar a scroll */
+  @media (max-width:820px){
+    .bg-fixed{ background-attachment:scroll !important; }
+    .nav-links{ display:none !important; }
+  }
+  @media (hover:none){ .bg-fixed{ background-attachment:scroll !important; } }
+</style>
+</helmet>
+
+<div style="background:#0A0A0A;color:#F5F3EC;font-family:'Archivo',system-ui,sans-serif;min-height:100vh;overflow-x:hidden;position:relative;-webkit-font-smoothing:antialiased;">
+
+  <!-- NAV -->
+  <nav style="position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px clamp(20px,5vw,72px);background:rgba(10,10,10,0.82);backdrop-filter:blur(12px);border-bottom:1px solid color-mix(in srgb, var(--accent) 14%, transparent);">
+    <a href="#top" style="display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit;">
+      <img src="logo-3j.png" alt="Organización 3J" width="40" height="40" style="display:block;border-radius:7px;object-fit:cover;">
+      <div style="line-height:1.05;"><div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.9rem;letter-spacing:0.02em;">ORGANIZACIÓN 3J</div><div style="font-size:0.6rem;color:#8A8A8A;font-weight:600;letter-spacing:0.18em;margin-top:2px;">TORNEOS DE PÁDEL</div></div>
+    </a>
+    <div style="display:flex;align-items:center;gap:clamp(14px,2.4vw,34px);">
+      <div class="nav-links" style="display:flex;align-items:center;gap:clamp(16px,2.4vw,34px);">
+        <a href="#nosotros" style="color:#cdcabf;text-decoration:none;font-size:0.84rem;font-weight:500;transition:color .2s;white-space:nowrap;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Nosotros</a>
+        <a href="#categorias" style="color:#cdcabf;text-decoration:none;font-size:0.84rem;font-weight:500;transition:color .2s;white-space:nowrap;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Categorías</a>
+        <a href="#temporadas" style="color:#cdcabf;text-decoration:none;font-size:0.84rem;font-weight:500;transition:color .2s;white-space:nowrap;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Temporadas</a>
+        <a href="#porque" style="color:#cdcabf;text-decoration:none;font-size:0.84rem;font-weight:500;transition:color .2s;white-space:nowrap;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Por qué 3J</a>
+        <a href="#ranking" style="color:#cdcabf;text-decoration:none;font-size:0.84rem;font-weight:500;transition:color .2s;white-space:nowrap;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Ranking</a>
+        <a href="#galeria" style="color:#cdcabf;text-decoration:none;font-size:0.84rem;font-weight:500;transition:color .2s;white-space:nowrap;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Galería</a>
+      </div>
+      <a href="{{ waHref }}" target="_blank" rel="noopener" style="background:var(--accent);color:var(--ink);text-decoration:none;padding:11px 22px;border-radius:3px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;transition:transform .2s,background .2s;" onMouseOver="this.style.background='#fff';this.style.transform='translateY(-1px)'" onMouseOut="this.style.background='var(--accent)';this.style.transform='none'">Inscribirse</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header id="top" style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:150px clamp(20px,5vw,72px) 90px;overflow:hidden;">
+    <div class="bg-fixed" style="{{ heroBgStyle }}"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,10,10,0.80) 0%, rgba(10,10,10,0.58) 45%, rgba(10,10,10,0.94) 100%);pointer-events:none;"></div>
+    <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(116deg, color-mix(in srgb, var(--accent) 4%, transparent) 0 1px, transparent 1px 48px),repeating-linear-gradient(24deg, color-mix(in srgb, var(--accent) 4%, transparent) 0 1px, transparent 1px 48px);pointer-events:none;"></div>
+    <div style="position:absolute;top:-18%;right:-12%;width:62vw;height:62vw;max-width:920px;max-height:920px;background:radial-gradient(circle, color-mix(in srgb, var(--accent) 9%, transparent) 0%, transparent 70%);pointer-events:none;"></div>
+    <div style="position:relative;z-index:2;max-width:1120px;margin:0 auto;width:100%;">
+      <div style="display:inline-flex;align-items:center;gap:10px;background:#121212;border:1px solid #262626;border-radius:30px;padding:7px 17px 7px 8px;margin-bottom:30px;font-size:0.74rem;font-weight:600;letter-spacing:0.04em;color:#cdcabf;">
+        <span style="width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse3j 2s infinite;"></span>CIRCUITO 3J · TEMPORADA {{ year }} EN JUEGO
+      </div>
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(2.7rem,8.4vw,6.6rem);line-height:0.95;letter-spacing:-0.02em;margin:0 0 26px;text-wrap:balance;">Donde cada<br>punto <span style="color:var(--accent);">cuenta</span>.</h1>
+      <p style="font-size:clamp(1rem,1.6vw,1.28rem);color:#c9c6ba;max-width:560px;line-height:1.6;margin:0 0 40px;">Organizamos torneos de pádel en {{ city }}. Competencia real, ranking público actualizado y una comunidad que juega todas las semanas.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:66px;">
+        <a href="{{ waHref }}" target="_blank" rel="noopener" style="background:var(--accent);color:var(--ink);text-decoration:none;padding:17px 34px;border-radius:3px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.94rem;text-transform:uppercase;letter-spacing:0.03em;display:inline-flex;align-items:center;gap:10px;transition:transform .2s,background .2s;" onMouseOver="this.style.background='#fff';this.style.transform='translateY(-2px)'" onMouseOut="this.style.background='var(--accent)';this.style.transform='none'">Inscribirme por WhatsApp →</a>
+        <a href="#ranking" style="background:transparent;color:#F5F3EC;text-decoration:none;padding:17px 34px;border-radius:3px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.94rem;text-transform:uppercase;letter-spacing:0.03em;border:1px solid #2e2e2e;transition:border-color .2s,color .2s;" onMouseOver="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onMouseOut="this.style.borderColor='#2e2e2e';this.style.color='#F5F3EC'">Ver el ranking</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:#262626;border:1px solid #262626;max-width:620px;">
+        <div style="background:#0A0A0A;padding:22px 20px;"><div style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,3vw,2.5rem);font-weight:700;color:var(--accent);">4</div><div style="font-size:0.66rem;text-transform:uppercase;letter-spacing:0.1em;color:#8A8A8A;margin-top:4px;">Categorías</div></div>
+        <div style="background:#0A0A0A;padding:22px 20px;"><div style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,3vw,2.5rem);font-weight:700;color:var(--accent);">500+</div><div style="font-size:0.66rem;text-transform:uppercase;letter-spacing:0.1em;color:#8A8A8A;margin-top:4px;">Jugadores</div></div>
+        <div style="background:#0A0A0A;padding:22px 20px;"><div style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,3vw,2.5rem);font-weight:700;color:var(--accent);">{{ year }}</div><div style="font-size:0.66rem;text-transform:uppercase;letter-spacing:0.1em;color:#8A8A8A;margin-top:4px;">Temporada</div></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="nosotros" style="position:relative;padding:clamp(70px,9vw,110px) clamp(20px,5vw,72px);background:#101010;border-top:1px solid #1d1d1d;border-bottom:1px solid #1d1d1d;">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(40px,5vw,72px);align-items:center;">
+      <div data-reveal style="position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#0A0A0A;border:1px solid #262626;display:flex;align-items:center;justify-content:center;">
+        <img src="logo-3j.png" alt="Organización 3J — Torneos Argentina" style="width:100%;height:100%;object-fit:cover;display:block;">
+      </div>
+      <div data-reveal>
+        <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:10px;"><span style="width:24px;height:2px;background:var(--accent);display:inline-block;"></span>Quiénes somos</div>
+        <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.9rem,3.6vw,2.7rem);line-height:1.04;letter-spacing:-0.01em;margin:16px 0 22px;">No vendemos canchas.<br>Armamos <span style="color:var(--accent);">competencia</span>.</h2>
+        <p style="color:#c9c6ba;line-height:1.75;font-size:1.02rem;margin:0 0 16px;">3J arma torneos de pádel en {{ city }} durante toda la temporada. Cada partido suma puntos a un ranking público, así que cada jugador sabe exactamente dónde está parado en su categoría.</p>
+        <p style="color:#c9c6ba;line-height:1.75;font-size:1.02rem;margin:0;">Nada de planillas perdidas ni resultados que se olvidan. Categorías separadas, masculino y femenino, para que cada nivel compita contra rivales de su propio palo.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin-top:34px;border-top:1px solid #262626;">
+          <div style="padding:20px 16px 0 0;border-right:1px solid #262626;"><div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--accent);font-size:1.4rem;">01</div><div style="font-weight:600;font-size:0.84rem;margin-top:6px;">Ranking en vivo</div></div>
+          <div style="padding:20px 16px 0;border-right:1px solid #262626;"><div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--accent);font-size:1.4rem;">02</div><div style="font-weight:600;font-size:0.84rem;margin-top:6px;">Torneos semanales</div></div>
+          <div style="padding:20px 0 0 16px;"><div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--accent);font-size:1.4rem;">03</div><div style="font-weight:600;font-size:0.84rem;margin-top:6px;">Comunidad activa</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIAS -->
+  <section id="categorias" style="position:relative;padding:clamp(70px,9vw,110px) clamp(20px,5vw,72px);">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div data-reveal style="max-width:680px;margin-bottom:54px;">
+        <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:10px;"><span style="width:24px;height:2px;background:var(--accent);display:inline-block;"></span>Circuito de pádel</div>
+        <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,4.5vw,3.2rem);line-height:1.02;letter-spacing:-0.01em;margin:14px 0 16px;">Cuatro categorías,<br>un <span style="color:var(--accent);">mismo circuito</span>.</h2>
+        <p style="color:#8A8A8A;font-size:1.02rem;line-height:1.6;max-width:540px;margin:0;">Masculino y femenino, de Quinta a Octava. Cada categoría suma puntos por separado para que compitas contra rivales de tu nivel.</p>
+      </div>
+      <div data-reveal style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:#262626;border:1px solid #262626;">
+        <div style="background:#0A0A0A;padding:38px 28px;position:relative;transition:background .25s;" onMouseOver="this.style.background='#141414'" onMouseOut="this.style.background='#0A0A0A'"><span style="position:absolute;top:24px;right:24px;font-size:0.72rem;color:#333;font-weight:700;font-family:'Space Grotesk',sans-serif;">01</span><div style="width:40px;height:40px;border-radius:50%;border:1.5px solid var(--accent);margin-bottom:20px;"></div><h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.3rem;text-transform:uppercase;margin:0 0 10px;">Quinta</h3><p style="color:#8A8A8A;font-size:0.92rem;line-height:1.55;margin:0;">La categoría más competitiva del circuito. Ranking masculino y femenino propio.</p></div>
+        <div style="background:#0A0A0A;padding:38px 28px;position:relative;transition:background .25s;" onMouseOver="this.style.background='#141414'" onMouseOut="this.style.background='#0A0A0A'"><span style="position:absolute;top:24px;right:24px;font-size:0.72rem;color:#333;font-weight:700;font-family:'Space Grotesk',sans-serif;">02</span><div style="width:40px;height:40px;border-radius:50%;border:1.5px solid var(--accent);margin-bottom:20px;"></div><h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.3rem;text-transform:uppercase;margin:0 0 10px;">Sexta</h3><p style="color:#8A8A8A;font-size:0.92rem;line-height:1.55;margin:0;">Nivel intermedio-alto, con torneos semanales y muchos puntos en juego.</p></div>
+        <div style="background:#0A0A0A;padding:38px 28px;position:relative;transition:background .25s;" onMouseOver="this.style.background='#141414'" onMouseOut="this.style.background='#0A0A0A'"><span style="position:absolute;top:24px;right:24px;font-size:0.72rem;color:#333;font-weight:700;font-family:'Space Grotesk',sans-serif;">03</span><div style="width:40px;height:40px;border-radius:50%;border:1.5px solid var(--accent);margin-bottom:20px;"></div><h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.3rem;text-transform:uppercase;margin:0 0 10px;">Séptima</h3><p style="color:#8A8A8A;font-size:0.92rem;line-height:1.55;margin:0;">Para jugadores en desarrollo que ya compiten en serio.</p></div>
+        <div style="background:#0A0A0A;padding:38px 28px;position:relative;transition:background .25s;" onMouseOver="this.style.background='#141414'" onMouseOut="this.style.background='#0A0A0A'"><span style="position:absolute;top:24px;right:24px;font-size:0.72rem;color:#333;font-weight:700;font-family:'Space Grotesk',sans-serif;">04</span><div style="width:40px;height:40px;border-radius:50%;border:1.5px solid var(--accent);margin-bottom:20px;"></div><h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.3rem;text-transform:uppercase;margin:0 0 10px;">Octava</h3><p style="color:#8A8A8A;font-size:0.92rem;line-height:1.55;margin:0;">La puerta de entrada al circuito 3J. Ideal para sumar tus primeros puntos.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEMPORADAS -->
+  <section id="temporadas" style="position:relative;padding:clamp(70px,9vw,110px) clamp(20px,5vw,72px);background:#101010;border-top:1px solid #1d1d1d;border-bottom:1px solid #1d1d1d;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div data-reveal style="max-width:680px;margin-bottom:44px;">
+        <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:10px;"><span style="width:24px;height:2px;background:var(--accent);display:inline-block;"></span>Circuito 3J {{ year }}</div>
+        <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,4.5vw,3.2rem);line-height:1.02;letter-spacing:-0.01em;margin:14px 0 16px;">Cuatro temporadas,<br><span style="color:var(--accent);">un mismo circuito</span>.</h2>
+        <p style="color:#8A8A8A;font-size:1.02rem;line-height:1.6;max-width:540px;margin:0;">El año se juega por trimestres. Elegí una temporada y mirá los puntos y torneos ganados de cada división, masculino y femenino.</p>
+      </div>
+      <div data-reveal style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <button onClick="{{ temporadaYearPrev }}" style="background:#0A0A0A;border:1px solid #262626;color:#F5F3EC;width:38px;height:38px;border-radius:6px;cursor:pointer;font-size:1.1rem;line-height:1;transition:.15s;" onMouseOver="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onMouseOut="this.style.borderColor='#262626';this.style.color='#F5F3EC'">‹</button>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.5rem;min-width:64px;text-align:center;">{{ temporadaYear }}</div>
+          <button onClick="{{ temporadaYearNext }}" style="background:#0A0A0A;border:1px solid #262626;color:#F5F3EC;width:38px;height:38px;border-radius:6px;cursor:pointer;font-size:1.1rem;line-height:1;transition:.15s;" onMouseOver="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onMouseOut="this.style.borderColor='#262626';this.style.color='#F5F3EC'">›</button>
+        </div>
+        <span style="font-size:0.78rem;color:#8A8A8A;">Navegá entre años para ver temporadas anteriores</span>
+      </div>
+      <div data-reveal style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:#262626;border:1px solid #262626;margin-bottom:2px;">
+        <button onClick="{{ selectT1 }}" style="{{ t1BtnStyle }}">T1<div style="font-size:0.7rem;font-weight:500;margin-top:4px;">Ene – Mar</div></button>
+        <button onClick="{{ selectT2 }}" style="{{ t2BtnStyle }}">T2<div style="font-size:0.7rem;font-weight:500;margin-top:4px;">Abr – Jun</div></button>
+        <button onClick="{{ selectT3 }}" style="{{ t3BtnStyle }}">T3<div style="font-size:0.7rem;font-weight:500;margin-top:4px;">Jul – Sep</div></button>
+        <button onClick="{{ selectT4 }}" style="{{ t4BtnStyle }}">T4<div style="font-size:0.7rem;font-weight:500;margin-top:4px;">Oct – Dic</div></button>
+      </div>
+      <div data-reveal style="border:1px solid #262626;border-radius:10px;overflow:hidden;background:#0A0A0A;">
+        <iframe src="{{ temporadasSrc }}" title="Temporadas Circuito 3J" style="width:100%;height:760px;border:none;display:block;background:#0A0A0A;"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- POR QUE 3J -->
+  <section id="porque" style="position:relative;padding:clamp(70px,9vw,110px) clamp(20px,5vw,72px);background:#101010;border-top:1px solid #1d1d1d;border-bottom:1px solid #1d1d1d;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div data-reveal style="max-width:680px;margin-bottom:54px;">
+        <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:10px;"><span style="width:24px;height:2px;background:var(--accent);display:inline-block;"></span>Por qué elegir 3J</div>
+        <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,4.5vw,3.2rem);line-height:1.02;letter-spacing:-0.01em;margin:14px 0 16px;">Jugás. Sumás.<br><span style="color:var(--accent);">Quedás registrado</span>.</h2>
+        <p style="color:#8A8A8A;font-size:1.02rem;line-height:1.6;max-width:540px;margin:0;">Cada torneo del circuito está pensado para que vengas a competir en serio y te lleves algo más que el resultado.</p>
+      </div>
+      <div data-reveal style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;">
+        <div style="background:#0A0A0A;border:1px solid #262626;border-radius:8px;padding:34px 28px;">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M9.5 14.5c0 1 1 1.6 2.5 1.6s2.5-.6 2.5-1.7-1-1.4-2.5-1.7-2.5-.6-2.5-1.6 1-1.6 2.5-1.6 2.5.6 2.5 1.6"/><line x1="12" y1="6.4" x2="12" y2="7.6"/><line x1="12" y1="16.4" x2="12" y2="17.6"/></svg>
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.18rem;margin:20px 0 10px;">Premios en efectivo</h3>
+          <p style="color:#8A8A8A;font-size:0.92rem;line-height:1.6;margin:0;">Los torneos reparten premios reales a los campeones y finalistas de cada categoría.</p>
+        </div>
+        <div style="background:#0A0A0A;border:1px solid #262626;border-radius:8px;padding:34px 28px;">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6"><circle cx="12" cy="12" r="8.2"/><path d="M5.5 7.5c3.2 2 3.2 7 0 9" stroke-linecap="round"/><path d="M18.5 7.5c-3.2 2-3.2 7 0 9" stroke-linecap="round"/></svg>
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.18rem;margin:20px 0 10px;">Pelotas nuevas</h3>
+          <p style="color:#8A8A8A;font-size:0.92rem;line-height:1.6;margin:0;">Bochas nuevas en cada partido. Jugás siempre en las mismas condiciones, sin excusas.</p>
+        </div>
+        <div style="background:#0A0A0A;border:1px solid #262626;border-radius:8px;padding:34px 28px;">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round"><path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h2L8 5h8l1.5 2h2A1.5 1.5 0 0 1 21 8.5v9A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5z"/><circle cx="12" cy="13" r="3.4"/></svg>
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.18rem;margin:20px 0 10px;">Fotografía profesional</h3>
+          <p style="color:#8A8A8A;font-size:0.92rem;line-height:1.6;margin:0;">Cubrimos el circuito con fotos profesionales que después subimos a la galería y a Instagram.</p>
+        </div>
+        <div style="background:#0A0A0A;border:1px solid #262626;border-radius:8px;padding:34px 28px;">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round"><line x1="6" y1="20" x2="6" y2="13"/><line x1="12" y1="20" x2="12" y2="8"/><line x1="18" y1="20" x2="18" y2="4"/></svg>
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.18rem;margin:20px 0 10px;">Ranking actualizado</h3>
+          <p style="color:#8A8A8A;font-size:0.92rem;line-height:1.6;margin:0;">Después de cada fecha actualizamos el ranking público. Sabés a quién tenés que pasar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARALLAX BAND -->
+  <section style="position:relative;height:clamp(340px,46vw,520px);display:flex;align-items:center;overflow:hidden;">
+    <div class="bg-fixed" style="{{ bandBgStyle }}"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.55) 55%, rgba(10,10,10,0.30) 100%);pointer-events:none;"></div>
+    <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto;width:100%;padding:0 clamp(20px,5vw,72px);">
+      <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:10px;"><span style="width:24px;height:2px;background:var(--accent);display:inline-block;"></span>En la cancha</div>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,5vw,3.6rem);line-height:1.0;letter-spacing:-0.02em;margin:16px 0 0;max-width:760px;text-wrap:balance;">+500 jugadores ya<br>compiten en <span style="color:var(--accent);">3J</span>.</h2>
+    </div>
+  </section>
+
+  <!-- RANKING -->
+  <section id="ranking" style="position:relative;padding:clamp(70px,9vw,110px) clamp(20px,5vw,72px);">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div data-reveal style="max-width:680px;margin-bottom:44px;">
+        <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:10px;"><span style="width:24px;height:2px;background:var(--accent);display:inline-block;"></span>Circuito 3J {{ year }}</div>
+        <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,4.5vw,3.2rem);line-height:1.02;letter-spacing:-0.01em;margin:14px 0 16px;">El ranking,<br><span style="color:var(--accent);">en tiempo real</span>.</h2>
+        <p style="color:#8A8A8A;font-size:1.02rem;line-height:1.6;max-width:540px;margin:0;">Buscá tu nombre, mirá tu categoría y seguí de cerca a quién tenés que pasarle por arriba.</p>
+      </div>
+      <div data-reveal style="border:1px solid #262626;border-radius:10px;overflow:hidden;background:#0A0A0A;">
+        <iframe src="{{ rankingSrc }}" title="Ranking Circuito 3J" style="width:100%;height:760px;border:none;display:block;background:#0A0A0A;"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERIA -->
+  <section id="galeria" style="position:relative;padding:clamp(70px,9vw,110px) clamp(20px,5vw,72px);background:#101010;border-top:1px solid #1d1d1d;border-bottom:1px solid #1d1d1d;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div data-reveal style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px;margin-bottom:38px;">
+        <div>
+          <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:10px;"><span style="width:24px;height:2px;background:var(--accent);display:inline-block;"></span>Momentos del circuito</div>
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.8rem,3.6vw,2.7rem);line-height:1.02;letter-spacing:-0.01em;margin:14px 0 0;">Así se vive <span style="color:var(--accent);">3J</span>.</h2>
+        </div>
+        <a href="{{ driveUrl }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;color:#F5F3EC;text-decoration:none;font-weight:600;font-size:0.92rem;border:1px solid #262626;border-radius:30px;padding:9px 19px;transition:.2s;" onMouseOver="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onMouseOut="this.style.borderColor='#262626';this.style.color='#F5F3EC'">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/><path d="M8.5 11.5l1.8 1.8 3.2-3.6"/></svg>
+          Encontrá tu foto acá
+        </a>
+      </div>
+      <div data-reveal style="position:relative;width:100%;overflow:hidden;border-radius:10px;border:1px solid #262626;background:#0d0d0d;-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);">
+        <div onMouseOver="this.style.animationPlayState='paused'" onMouseOut="this.style.animationPlayState='running'" style="display:flex;gap:14px;padding:16px 0;width:max-content;animation:scrollx {{ stripDur }} linear infinite;will-change:transform;">
+          <sc-for list="{{ strip }}" as="s" hint-placeholder-count="6">
+            <div style="flex:none;width:clamp(200px,22vw,270px);aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:linear-gradient(150deg,#1c1c1c,#0a0a0a);position:relative;">
+              <sc-if value="{{ s.showImg }}" hint-placeholder-val="{{ true }}">
+                <img src="{{ s.url }}" alt="{{ s.name }}" data-idx="{{ s.idx }}" loading="lazy" onError="{{ onImgError }}" style="width:100%;height:100%;object-fit:cover;display:block;">
+              </sc-if>
+              <sc-if value="{{ s.showPlaceholder }}" hint-placeholder-val="{{ false }}">
+                <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background-image:repeating-linear-gradient(45deg, color-mix(in srgb, var(--accent) 6%, transparent) 0 1px, transparent 1px 18px);">
+                  <svg viewBox="0 0 100 100" width="40" style="color:color-mix(in srgb, var(--accent) 50%, transparent);"><polygon points="50,9 89,82 11,82" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/></svg>
+                  <span style="font-family:monospace;font-size:0.62rem;letter-spacing:0.1em;color:#777;text-transform:uppercase;text-align:center;padding:0 8px;">{{ s.name }}</span>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <section style="background:var(--accent);color:var(--ink);padding:clamp(56px,7vw,80px) clamp(20px,5vw,72px);text-align:center;">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.8rem,4.4vw,2.9rem);line-height:1.05;letter-spacing:-0.01em;margin:0 0 14px;">¿Listo para anotarte?</h2>
+    <p style="font-size:1.05rem;opacity:0.82;max-width:480px;margin:0 auto 30px;line-height:1.5;">Sumate al circuito, jugá tus partidos y subí en el ranking semana a semana.</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;">
+      <a href="{{ waHref }}" target="_blank" rel="noopener" style="background:var(--ink);color:var(--accent);text-decoration:none;padding:16px 32px;border-radius:3px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.92rem;text-transform:uppercase;letter-spacing:0.03em;display:inline-flex;align-items:center;gap:9px;transition:.2s;" onMouseOver="this.style.background='#1c1c1c'" onMouseOut="this.style.background='var(--ink)'">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.6-1.2a.4.4 0 0 0 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-1 2.2 5.3 5.3 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4c2.3.9 2.3.6 2.7.6a2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg>
+        Escribinos por WhatsApp
+      </a>
+      <a href="{{ ig }}" target="_blank" rel="noopener" style="background:transparent;color:var(--ink);text-decoration:none;padding:16px 32px;border-radius:3px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.92rem;text-transform:uppercase;letter-spacing:0.03em;border:1.5px solid var(--ink);display:inline-flex;align-items:center;gap:9px;transition:.2s;" onMouseOver="this.style.background='rgba(10,10,10,0.08)'" onMouseOut="this.style.background='transparent'">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="padding:clamp(48px,6vw,60px) clamp(20px,5vw,72px) 32px;border-top:1px solid #1d1d1d;">
+    <div style="max-width:1200px;margin:0 auto 38px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(32px,4vw,48px);">
+      <div>
+        <div style="display:flex;align-items:center;gap:11px;margin-bottom:14px;">
+          <img src="logo-3j.png" alt="Organización 3J" width="38" height="38" style="display:block;border-radius:7px;object-fit:cover;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.95rem;">ORGANIZACIÓN 3J</div>
+        </div>
+        <p style="color:#8A8A8A;font-size:0.88rem;line-height:1.6;max-width:320px;margin:0;">Organización de torneos de pádel en {{ city }}. Competencia, ranking y comunidad, toda la temporada.</p>
+      </div>
+      <div>
+        <h4 style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:#8A8A8A;margin:0 0 16px;font-weight:600;">Navegación</h4>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:0.9rem;">
+          <a href="#nosotros" style="color:#cdcabf;text-decoration:none;transition:color .2s;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Nosotros</a>
+          <a href="#categorias" style="color:#cdcabf;text-decoration:none;transition:color .2s;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Categorías</a>
+          <a href="#temporadas" style="color:#cdcabf;text-decoration:none;transition:color .2s;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Temporadas</a>
+          <a href="#porque" style="color:#cdcabf;text-decoration:none;transition:color .2s;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Por qué 3J</a>
+          <a href="#ranking" style="color:#cdcabf;text-decoration:none;transition:color .2s;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Ranking</a>
+          <a href="#galeria" style="color:#cdcabf;text-decoration:none;transition:color .2s;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Galería</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:#8A8A8A;margin:0 0 16px;font-weight:600;">Contacto</h4>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:0.9rem;">
+          <a href="{{ waHref }}" target="_blank" rel="noopener" style="color:#cdcabf;text-decoration:none;transition:color .2s;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">WhatsApp</a>
+          <a href="{{ ig }}" target="_blank" rel="noopener" style="color:#cdcabf;text-decoration:none;transition:color .2s;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Instagram</a>
+          <a href="{{ mailHref }}" style="color:#cdcabf;text-decoration:none;transition:color .2s;" onMouseOver="this.style.color='var(--accent)'" onMouseOut="this.style.color='#cdcabf'">Email</a>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1200px;margin:0 auto;padding-top:24px;border-top:1px solid #1d1d1d;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:0.78rem;color:#8A8A8A;">
+      <span>© {{ year }} Organización 3J — Torneos de Pádel · Galimo Marketing ©</span>
+      <span>{{ city }}</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accentColor&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FFD400&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#FFD400&quot;, &quot;#D4FF3F&quot;, &quot;#39FF7A&quot;, &quot;#FF5C2B&quot;] },
+  &quot;seasonYear&quot;: { &quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 2026, &quot;tsType&quot;: &quot;number&quot;, &quot;min&quot;: 2024, &quot;max&quot;: 2035 },
+  &quot;whatsappNumber&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;5493512017365&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;instagramUrl&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;https://www.instagram.com/organizacion3j/&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;driveFolderUrl&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;https://drive.google.com/drive/folders/1y7PiZeSoTgFQOeNO6EXt8V3PmM77YlBz&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;email&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;organizaciondeeventos3j@gmail.com&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;city&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Córdoba, Argentina&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;rankingSrc&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;ranking_3j.html&quot;, &quot;tsType&quot;: &quot;string&quot; }
+}">
+class Component extends DCLogic {
+  state = { slides: [], current: 0, broken: {}, temporadaYear: 2026, temporadaTrim: 't2' };
+
+  componentDidMount(){
+    this.applyAccent();
+    this.initReveal();
+    this.loadGallery();
+    // safety net: if nothing loaded in 9s, show the sample gallery
+    this.safety = setTimeout(() => { if(!this.state.slides.length) this.fallback(); }, 9000);
+  }
+  componentDidUpdate(prev){
+    if(prev.accentColor !== this.props.accentColor) this.applyAccent();
+  }
+  componentWillUnmount(){
+    clearTimeout(this.safety);
+    if(this.obs) this.obs.disconnect();
+  }
+
+  applyAccent(){
+    const a = this.props.accentColor ?? '#FFD400';
+    document.documentElement.style.setProperty('--accent', a);
+  }
+
+  selectTemporadaTrim(trim){ this.setState({ temporadaTrim: trim }); }
+  shiftTemporadaYear(delta){ this.setState(s => ({ temporadaYear: Math.max(2024, s.temporadaYear + delta) })); }
+
+  initReveal(){
+    setTimeout(() => {
+      const els = [...document.querySelectorAll('[data-reveal]')];
+      els.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(26px)';
+        el.style.transition = 'opacity .8s ease, transform .8s ease';
+      });
+      this.obs = new IntersectionObserver((ents) => {
+        ents.forEach(e => {
+          if(e.isIntersecting){ e.target.style.opacity = '1'; e.target.style.transform = 'none'; this.obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(el => this.obs.observe(el));
+    }, 80);
+  }
+
+  fallback(){
+    if(this.state.slides.length) return;
+    this.setState({ slides: [
+      { name: 'Pádel en juego' },
+      { name: 'Finales del circuito' },
+      { name: 'Premiación' },
+      { name: 'Comunidad 3J' },
+      { name: 'Torneos semanales' }
+    ] });
+  }
+
+  async loadGallery(){
+    const FOLDER = '1y7PiZeSoTgFQOeNO6EXt8V3PmM77YlBz';
+    const KEY = 'AIzaSyD7hBcqcdwNQxTR8ZW3AO8nDYZy__1GG4Q';
+    const YEAR = String(this.props.seasonYear ?? 2026);
+    const thumb = id => `https://drive.google.com/thumbnail?id=${id}&sz=w1600`;
+    const list = async (q, fields) => {
+      const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=${encodeURIComponent(fields)}&pageSize=200&key=${KEY}`;
+      const r = await fetch(url);
+      if(!r.ok) throw new Error('drive ' + r.status);
+      const d = await r.json();
+      return d.files || [];
+    };
+    try {
+      // solo la ÚLTIMA carpeta (la más reciente) dentro del Drive
+      const allSubs = await list(`'${FOLDER}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`, 'files(id,name,createdTime)');
+      // la carpeta creada más recientemente
+      const lastFolder = allSubs.slice().sort((a, b) => new Date(b.createdTime || 0) - new Date(a.createdTime || 0))[0];
+
+      let imgs = [], folderName = null;
+      if(lastFolder){
+        folderName = lastFolder.name;
+        imgs = await list(`'${lastFolder.id}' in parents and mimeType contains 'image/' and trashed=false`, 'files(id,name,createdTime)').catch(() => []);
+      } else {
+        // si no hay subcarpetas, usar las imágenes sueltas de la raíz
+        imgs = await list(`'${FOLDER}' in parents and mimeType contains 'image/' and trashed=false`, 'files(id,name,createdTime)').catch(() => []);
+      }
+      const all = imgs.slice().sort((a, b) => new Date(b.createdTime || 0) - new Date(a.createdTime || 0));
+      if(!all.length){ this.fallback(); return; }
+      this.setState({ current: 0, slides: all.map(f => ({ url: thumb(f.id), name: (folderName || f.name.replace(/\.[^/.]+$/, '')) })) });
+    } catch(e){
+      console.warn('Galería: usando muestra (', e.message, ')');
+      this.fallback();
+    }
+  }
+
+  renderVals(){
+    const wa = String(this.props.whatsappNumber ?? '5493512017365').replace(/\D/g, '');
+    const waHref = `https://wa.me/${wa}?text=${encodeURIComponent('Hola! quiero jugar en Torneo 3J')}`;
+    const ig = this.props.instagramUrl ?? 'https://www.instagram.com/organizacion3j/';
+    const email = this.props.email ?? 'organizaciondeeventos3j@gmail.com';
+    const mailHref = 'mailto:' + email;
+    const year = this.props.seasonYear ?? 2026;
+    const city = this.props.city ?? 'Córdoba, Argentina';
+    const rankingSrc = this.props.rankingSrc ?? 'ranking_3j.html';
+
+    const raw = this.state.slides;
+    // filmstrip: render the list twice so the marquee loops seamlessly (translateX -50%)
+    const doubled = [...raw, ...raw];
+    const strip = doubled.map((s, i) => {
+      const idx = raw.length ? (i % raw.length) : i;
+      const showImg = !!s.url && !this.state.broken[idx];
+      return { idx, url: s.url, name: s.name, showImg, showPlaceholder: !showImg };
+    });
+    // ~6s per photo of travel keeps it calm; min 28s so few photos don't whip past
+    const stripDur = Math.max(28, raw.length * 6) + 's';
+
+    // use real Drive padel photos as the parallax backgrounds; fall back to a court-line texture
+    const courtBg = 'repeating-linear-gradient(116deg, rgba(255,212,0,0.05) 0 1px, transparent 1px 54px),repeating-linear-gradient(24deg, rgba(255,212,0,0.05) 0 1px, transparent 1px 54px), linear-gradient(150deg,#1a1a1a,#0a0a0a)';
+    const withUrl = raw.filter(s => s.url);
+    const bandImg = withUrl[0] && withUrl[0].url;
+    const bgBase = { position: 'absolute', inset: 0, backgroundSize: 'cover', backgroundPosition: 'center top', backgroundAttachment: 'fixed' };
+    // foto fija de inicio de Organización 3J
+    const heroBgStyle = { ...bgBase, backgroundImage: 'url("hero-3j.png")' };
+    const bandBgStyle = { ...bgBase, backgroundImage: bandImg ? `url("${bandImg}")` : courtBg };
+
+    const driveUrl = this.props.driveFolderUrl ?? 'https://drive.google.com/drive/folders/1y7PiZeSoTgFQOeNO6EXt8V3PmM77YlBz';
+
+    const trimActiveStyle = { border:'none', background:'var(--accent)', color:'#0A0A0A', padding:'22px 18px', fontFamily:"'Space Grotesk',sans-serif", fontWeight:700, fontSize:'1rem', cursor:'pointer', textAlign:'left', transition:'.15s' };
+    const trimInactiveStyle = { ...trimActiveStyle, background:'#0A0A0A', color:'#8A8A8A' };
+    const styleFor = (id) => this.state.temporadaTrim === id ? trimActiveStyle : trimInactiveStyle;
+    const temporadasSrc = `ranking_3j.html?archive=${this.state.temporadaTrim}&ay=${this.state.temporadaYear}`;
+
+    return {
+      waHref, ig, mailHref, year, city, rankingSrc, driveUrl,
+      strip, stripDur, heroBgStyle, bandBgStyle,
+      temporadaYear: this.state.temporadaYear,
+      temporadaYearPrev: () => this.shiftTemporadaYear(-1),
+      temporadaYearNext: () => this.shiftTemporadaYear(1),
+      selectT1: () => this.selectTemporadaTrim('t1'),
+      selectT2: () => this.selectTemporadaTrim('t2'),
+      selectT3: () => this.selectTemporadaTrim('t3'),
+      selectT4: () => this.selectTemporadaTrim('t4'),
+      t1BtnStyle: styleFor('t1'), t2BtnStyle: styleFor('t2'), t3BtnStyle: styleFor('t3'), t4BtnStyle: styleFor('t4'),
+      temporadasSrc,
+      onImgError: (e) => { const i = +e.target.dataset.idx; this.setState(st => ({ broken: { ...st.broken, [i]: true } })); }
+    };
+  }
+}
+</script>
+</body>
+</html>

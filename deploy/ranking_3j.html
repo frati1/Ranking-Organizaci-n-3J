@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ranking — Circuito 3J</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --accent:#FFD400; --bg:#0A0A0A; --s1:#121212; --bd:#262626; --txt:#F5F3EC; --mut:#8A8A8A; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Archivo',system-ui,sans-serif;background:var(--bg);color:var(--txt);padding:28px 26px 40px;}
+  .head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:6px;}
+  .title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.15rem;letter-spacing:-0.01em;}
+  .title span{color:var(--accent);}
+  .sub{font-size:0.74rem;color:var(--mut);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:20px;}
+  .search{display:flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--bd);border-radius:30px;padding:8px 16px;}
+  .search input{background:none;border:none;outline:none;color:var(--txt);font-family:inherit;font-size:0.86rem;width:160px;}
+  .search input::placeholder{color:var(--mut);}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+  .tab{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.8rem;letter-spacing:0.02em;text-transform:uppercase;
+    background:var(--s1);border:1px solid var(--bd);color:var(--mut);border-radius:4px;padding:9px 16px;cursor:pointer;transition:.18s;}
+  .tab:hover{color:var(--txt);}
+  .tab.on{background:var(--accent);color:var(--bg);border-color:var(--accent);}
+  .split{display:grid;grid-template-columns:1fr;gap:30px;max-width:720px;}
+  .split.m-masc .gcol-fem{display:none;}
+  .split.m-fem .gcol-masc{display:none;}
+  .col-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;justify-content:flex-end;}
+  .col-head .bar{display:none;}
+  .col-head h3{display:none;}
+  .col-head .cnt{margin-left:auto;font-size:0.72rem;color:var(--mut);letter-spacing:0.04em;}
+  table{width:100%;border-collapse:collapse;}
+  thead th{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.09em;color:var(--mut);text-align:left;font-weight:600;padding:0 11px 11px;border-bottom:1px solid var(--bd);}
+  thead th.r{text-align:right;}
+  tbody td{padding:11px;border-bottom:1px solid var(--bd);font-size:0.9rem;}
+  tbody tr{transition:background .15s;}
+  tbody tr:hover{background:var(--s1);}
+  .pos{font-family:'Space Grotesk',sans-serif;font-weight:700;width:42px;color:var(--mut);}
+  tr.top .pos{color:var(--accent);}
+  .player{font-weight:600;cursor:pointer;transition:color .15s;}
+  .player:hover{color:var(--accent);}
+  .player .hist-badge{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);margin-left:8px;vertical-align:middle;opacity:.85;}
+  .pts{font-family:'Space Grotesk',sans-serif;font-weight:700;text-align:right;color:var(--accent);font-size:1rem;white-space:nowrap;}
+  .tg{text-align:right;color:var(--mut);font-size:0.84rem;}
+  .empty{padding:30px 12px;text-align:center;color:var(--mut);font-size:0.88rem;}
+  .prize{display:inline-flex;align-items:center;gap:5px;margin-left:10px;padding:3px 10px 3px 9px;
+    border:1px solid color-mix(in srgb, var(--accent) 45%, transparent);border-radius:20px;
+    font-size:0.74rem;font-weight:600;color:var(--accent);white-space:nowrap;vertical-align:middle;line-height:1.3;}
+  .prize svg{flex:none;}
+  .prize-edit{display:inline-block;margin-left:10px;min-width:54px;padding:3px 10px;border:1px dashed color-mix(in srgb, var(--accent) 50%, transparent);
+    border-radius:20px;font-size:0.74rem;font-weight:600;color:var(--accent);white-space:nowrap;vertical-align:middle;outline:none;cursor:text;line-height:1.3;}
+  .prize-edit:focus{border-style:solid;background:#1c1c14;}
+  .prize-edit:empty::before{content:'+ premio';color:#6a6a6a;font-weight:500;}
+  .gender-toggle{display:flex;gap:8px;margin-bottom:22px;max-width:420px;}
+  .gender-toggle button{flex:1;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.82rem;letter-spacing:0.02em;
+    text-transform:uppercase;background:var(--s1);border:1px solid var(--bd);color:var(--mut);border-radius:6px;padding:12px;cursor:pointer;transition:.15s;}
+  .gender-toggle button.on{background:var(--accent);color:var(--bg);border-color:var(--accent);}
+  .archive-mode #editToggle{display:none;}
+  .note{margin-top:18px;font-size:0.72rem;color:var(--mut);letter-spacing:0.02em;}
+  @media (max-width:760px){
+    body{padding:22px 16px 36px;}
+    tbody td{padding:13px 8px;font-size:0.95rem;}
+    .pos{width:34px;}
+    .pts{font-size:1.05rem;}
+  }
+
+  /* edit */
+  .iconbtn{display:inline-flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--bd);color:var(--mut);
+    border-radius:30px;padding:8px 16px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.78rem;
+    letter-spacing:0.02em;transition:.18s;}
+  .iconbtn:hover{color:var(--txt);border-color:#3a3a3a;}
+  .iconbtn.live{background:var(--accent);color:var(--bg);border-color:var(--accent);}
+  .actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .editbar{display:none;align-items:center;gap:10px;flex-wrap:wrap;background:var(--s1);border:1px solid var(--bd);
+    border-left:3px solid var(--accent);border-radius:6px;padding:12px 16px;margin-bottom:20px;}
+  .editbar.on{display:flex;}
+  .editbar .lbl{font-size:0.8rem;color:#cdcabf;font-weight:600;margin-right:auto;}
+  .editbar .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:middle;}
+  .btn{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.76rem;text-transform:uppercase;letter-spacing:0.03em;
+    border-radius:4px;padding:9px 16px;cursor:pointer;border:1px solid transparent;transition:.15s;}
+  .btn.primary{background:var(--accent);color:var(--bg);}
+  .btn.primary:hover{background:#fff;}
+  .btn.ghost{background:transparent;color:#cdcabf;border-color:var(--bd);}
+  .btn.ghost:hover{color:var(--txt);border-color:#3a3a3a;}
+  body.editing tbody td.edit{background:#141414;}
+  td .cell{outline:none;border-radius:3px;padding:2px 5px;display:inline-block;min-width:24px;}
+  body.editing td .cell[contenteditable]{box-shadow:inset 0 0 0 1px #333;cursor:text;}
+  body.editing td .cell[contenteditable]:focus{box-shadow:inset 0 0 0 1px var(--accent);background:#1c1c14;}
+  .del{background:none;border:none;color:#6a6a6a;cursor:pointer;font-size:1rem;line-height:1;padding:2px 6px;border-radius:4px;transition:.15s;}
+  .del:hover{color:#FF5C4D;background:rgba(255,92,77,0.1);}
+  .addrow{margin-top:10px;}
+  .addrow button{width:100%;background:transparent;border:1px dashed #2e2e2e;color:var(--mut);border-radius:6px;padding:10px;
+    cursor:pointer;font-family:'Archivo',sans-serif;font-size:0.82rem;font-weight:500;transition:.15s;}
+  .addrow button:hover{border-color:var(--accent);color:var(--accent);}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;}
+  .modal.on{display:flex;}
+  .modal .card{background:#121212;border:1px solid var(--bd);border-radius:10px;padding:30px 28px;width:100%;max-width:340px;}
+  .modal h4{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:6px;}
+  .modal p{font-size:0.82rem;color:var(--mut);margin-bottom:18px;line-height:1.5;}
+  .modal input{width:100%;background:#0A0A0A;border:1px solid var(--bd);border-radius:6px;padding:12px 14px;color:var(--txt);
+    font-family:inherit;font-size:0.95rem;outline:none;margin-bottom:6px;}
+  .modal input:focus{border-color:var(--accent);}
+  .modal .err{color:#FF5C4D;font-size:0.76rem;min-height:18px;margin-bottom:12px;}
+  .modal .row{display:flex;gap:10px;}
+  .modal .row .btn{flex:1;}
+  /* historial de puntos */
+  .histlist{display:flex;flex-direction:column;gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:8px;overflow:hidden;max-height:46vh;overflow-y:auto;margin-bottom:16px;}
+  .hist-item{display:flex;align-items:center;justify-content:space-between;gap:14px;background:#0A0A0A;padding:11px 14px;}
+  .hist-pts{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--accent);font-size:0.98rem;white-space:nowrap;}
+  .hist-pts.neg{color:#FF5C4D;}
+  .hist-date{font-size:0.76rem;color:var(--mut);white-space:nowrap;}
+  .hist-empty{padding:20px 14px;font-size:0.84rem;color:var(--mut);line-height:1.55;text-align:center;}
+</style>
+</head>
+<body>
+  <div class="head">
+    <div>
+      <div class="title">Ranking <span>Circuito 3J</span></div>
+    </div>
+    <div class="actions">
+      <div class="search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A8A8A" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        <input id="q" type="text" placeholder="Buscá tu nombre…">
+      </div>
+      <button id="editToggle" class="iconbtn" title="Editar ranking">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        <span id="editToggleLbl">Editar</span>
+      </button>
+    </div>
+  </div>
+  <div class="sub" id="subLabel">Acumulado últimos 3 meses · Abril–Junio 2026</div>
+  <div class="editbar" id="editbar">
+    <span class="lbl"><span class="dot"></span>Modo edición — tocá un valor para cambiarlo</span>
+    <button class="btn ghost" id="btnExport">Exportar respaldo</button>
+    <button class="btn ghost" id="btnSaveTemporada">Guardar temporada</button>
+    <button class="btn ghost" id="btnCancel">Cancelar</button>
+    <button class="btn primary" id="btnSave">Guardar</button>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div class="gender-toggle" id="genderToggle">
+    <button data-g="masc" class="on">Masculino</button>
+    <button data-g="fem">Femenino</button>
+  </div>
+  <div class="split m-masc" id="split">
+    <div class="gcol gcol-masc">
+      <div class="col-head"><span class="bar"></span><h3>Masculino</h3><span class="cnt" id="cntM"></span></div>
+      <table><thead><tr><th>#</th><th>Nombre y Apellido</th><th class="tg r">TG</th><th class="r">Puntos</th></tr></thead><tbody id="rowsM"></tbody></table>
+    </div>
+    <div class="gcol gcol-fem">
+      <div class="col-head"><span class="bar"></span><h3>Femenino</h3><span class="cnt" id="cntF"></span></div>
+      <table><thead><tr><th>#</th><th>Nombre y Apellido</th><th class="tg r">TG</th><th class="r">Puntos</th></tr></thead><tbody id="rowsF"></tbody></table>
+    </div>
+  </div>
+  <p class="note">TG = torneos ganados · Fuente: planilla oficial del Circuito 3J.</p>
+
+  <div class="modal" id="pwModal">
+    <div class="card">
+      <h4>Editar ranking</h4>
+      <p>Ingresá la contraseña de administrador para modificar los datos.</p>
+      <input id="pwInput" type="password" placeholder="Contraseña" autocomplete="current-password">
+      <div class="err" id="pwErr"></div>
+      <div class="row">
+        <button class="btn ghost" id="pwCancel">Cancelar</button>
+        <button class="btn primary" id="pwOk">Ingresar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="histModal">
+    <div class="card">
+      <h4 id="histName">Jugador</h4>
+      <p id="histSub">Historial de puntos</p>
+      <div class="histlist" id="histList"></div>
+      <div class="row"><button class="btn primary" id="histClose">Cerrar</button></div>
+    </div>
+  </div>
+
+  <div class="modal" id="trimPwModal">
+    <div class="card">
+      <h4>Guardar temporada</h4>
+      <p id="trimPwMsg">Esto va a guardar el estado actual como la temporada activa. Ingresá la contraseña para confirmar.</p>
+      <input id="trimPwInput" type="password" placeholder="Contraseña" autocomplete="current-password">
+      <div class="err" id="trimPwErr"></div>
+      <div class="row">
+        <button class="btn ghost" id="trimPwCancel">Cancelar</button>
+        <button class="btn primary" id="trimPwOk">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+  const DATA = {"masc":{"4ta/5ta":[{"pos":1,"name":"Salvador Davies","pts":24400,"tg":13,"id":1},{"pos":2,"name":"Augusto Cesar Neirot","pts":16500,"tg":7,"id":2},{"pos":3,"name":"Jonathan Soria","pts":16300,"tg":5,"id":3},{"pos":4,"name":"Santiago Reinozo","pts":15600,"tg":3,"id":4},{"pos":5,"name":"Maxi Libera","pts":14000,"tg":4,"id":5},{"pos":6,"name":"Emmanuel Bertello","pts":13800,"tg":7,"id":6},{"pos":7,"name":"Luis Marcelo Villegas","pts":13200,"tg":4,"id":7},{"pos":8,"name":"Jere Lucero","pts":12500,"tg":5,"id":8},{"pos":9,"name":"Pablo Nieto","pts":12000,"tg":2,"id":9},{"pos":10,"name":"Juan Pablo Castro","pts":9300,"tg":3,"id":10},{"pos":11,"name":"Sergio Aracena","pts":8800,"tg":3,"id":11},{"pos":12,"name":"Matias Moreno","pts":7800,"tg":4,"id":12},{"pos":13,"name":"Fernando Rivero","pts":7500,"tg":7,"id":13},{"pos":13,"name":"Leonardo Raimondetto","pts":7500,"tg":7,"id":14},{"pos":15,"name":"Gustavo Ramirez","pts":7000,"tg":3,"id":15},{"pos":16,"name":"Maxi Luna","pts":6600,"tg":4,"id":16},{"pos":17,"name":"Agustin Soteras","pts":6500,"tg":2,"id":17},{"pos":18,"name":"Luis Botti","pts":6300,"tg":1,"id":18},{"pos":19,"name":"Ignacio Corvalan","pts":6100,"tg":2,"id":19},{"pos":20,"name":"Fabrizio Carossi","pts":5800,"tg":2,"id":20},{"pos":21,"name":"Lucas Pitt","pts":5700,"tg":4,"id":21},{"pos":22,"name":"Pablo Ceferino Abescat","pts":4700,"tg":2,"id":22},{"pos":23,"name":"Alvaro Ponte","pts":4200,"tg":2,"id":23},{"pos":24,"name":"Mauricio Baez","pts":3000,"tg":3,"id":24},{"pos":24,"name":"Leandro Mosconi","pts":3000,"tg":1,"id":25},{"pos":26,"name":"Juan Kelly","pts":2800,"tg":1,"id":26},{"pos":27,"name":"Walter Gimenez","pts":2500,"tg":0,"id":27},{"pos":28,"name":"Facu Ferrero","pts":2400,"tg":1,"id":28},{"pos":29,"name":"Emanuel Laquiz","pts":2100,"tg":1,"id":29},{"pos":30,"name":"Pablo Martin","pts":2000,"tg":2,"id":30},{"pos":30,"name":"Facundo Ochoa","pts":2000,"tg":2,"id":31},{"pos":30,"name":"Tomas Altuna","pts":2000,"tg":2,"id":32},{"pos":30,"name":"Agustin Barrionuevo","pts":2000,"tg":2,"id":33},{"pos":30,"name":"Ian Astorga","pts":2000,"tg":1,"id":34},{"pos":35,"name":"Leandro Moresi","pts":1900,"tg":1,"id":35},{"pos":36,"name":"Santiago Martinez","pts":1800,"tg":1,"id":36},{"pos":36,"name":"Jorge Linares","pts":1800,"tg":1,"id":37},{"pos":36,"name":"Nahuel Godoy","pts":1800,"tg":1,"id":38},{"pos":36,"name":"Denis Reyes","pts":1800,"tg":1,"id":39},{"pos":40,"name":"Benjamin Toloza","pts":1600,"tg":1,"id":40},{"pos":40,"name":"Pedro Ibañez","pts":1600,"tg":1,"id":41},{"pos":40,"name":"Leo Foglia","pts":1600,"tg":1,"id":42},{"pos":40,"name":"Pablo Abaurrea","pts":1600,"tg":1,"id":43},{"pos":40,"name":"Federico Grenillon","pts":1600,"tg":1,"id":44},{"pos":40,"name":"Giuliano Mauri","pts":1600,"tg":0,"id":45},{"pos":40,"name":"Damian Arrieta","pts":1600,"tg":0,"id":46},{"pos":47,"name":"Ruben Herrera","pts":1500,"tg":2,"id":47},{"pos":48,"name":"Tomas Mocciaro","pts":1400,"tg":1,"id":48},{"pos":48,"name":"Franco Ubalton","pts":1400,"tg":1,"id":49},{"pos":48,"name":"Ever Ferrier","pts":1400,"tg":1,"id":50},{"pos":48,"name":"Guillermo Torres","pts":1400,"tg":1,"id":51},{"pos":48,"name":"Salvador Ripoll","pts":1400,"tg":1,"id":52},{"pos":53,"name":"Matias Fuentes","pts":1300,"tg":1,"id":53},{"pos":53,"name":"Martin Ochoa","pts":1300,"tg":1,"id":54},{"pos":55,"name":"Diego Scaglioni","pts":1200,"tg":0,"id":55},{"pos":55,"name":"Edgar Estigarribia","pts":1200,"tg":0,"id":56},{"pos":55,"name":"Matias Torresi","pts":1200,"tg":0,"id":57},{"pos":55,"name":"Juan Socolovsky","pts":1200,"tg":0,"id":58},{"pos":55,"name":"Mateo Oliva","pts":1200,"tg":0,"id":59},{"pos":55,"name":"Pablo Tulian","pts":1200,"tg":0,"id":60},{"pos":61,"name":"Nicolas Pedrerol","pts":1100,"tg":0,"id":61},{"pos":61,"name":"Emanuel Bazan","pts":1100,"tg":0,"id":62},{"pos":63,"name":"Nahuel Ippoliti","pts":1000,"tg":0,"id":63},{"pos":63,"name":"Rodrigo Stanley","pts":1000,"tg":1,"id":64},{"pos":63,"name":"Agustin Virgolini","pts":1000,"tg":1,"id":65},{"pos":63,"name":"Diego Rubiolo","pts":1000,"tg":1,"id":66},{"pos":63,"name":"Andres Marandet","pts":1000,"tg":1,"id":67},{"pos":63,"name":"Juan Minetti","pts":1000,"tg":1,"id":68},{"pos":63,"name":"Sebastian David","pts":1000,"tg":1,"id":69},{"pos":63,"name":"Diego Ciminary","pts":1000,"tg":1,"id":70},{"pos":63,"name":"Elias Villafañe","pts":1000,"tg":1,"id":71},{"pos":63,"name":"Nicolas Navarro","pts":1000,"tg":1,"id":72},{"pos":63,"name":"Mateo Passarelli","pts":1000,"tg":1,"id":73},{"pos":63,"name":"Mateo Perez","pts":1000,"tg":1,"id":74},{"pos":63,"name":"Agustin Sposito","pts":1000,"tg":1,"id":75},{"pos":63,"name":"Lucas Soto","pts":1000,"tg":1,"id":76},{"pos":63,"name":"Robertino De Gaetano","pts":1000,"tg":1,"id":77},{"pos":63,"name":"Ezequiel Berazategui","pts":1000,"tg":1,"id":78},{"pos":63,"name":"Ricardo Delgado","pts":1000,"tg":1,"id":79},{"pos":63,"name":"Facundo Hernandez","pts":1000,"tg":1,"id":80},{"pos":63,"name":"Mateo Rios","pts":1000,"tg":1,"id":81},{"pos":63,"name":"Hernan Leibiker","pts":1000,"tg":2,"id":82},{"pos":63,"name":"Maxi Diez","pts":1000,"tg":1,"id":83},{"pos":63,"name":"Francisco Erazu","pts":1000,"tg":0,"id":84},{"pos":63,"name":"Benjamin Landra","pts":1000,"tg":0,"id":85},{"pos":86,"name":"Simon Pauletti","pts":900,"tg":0,"id":86},{"pos":86,"name":"Tobias Sayas","pts":900,"tg":0,"id":87},{"pos":88,"name":"Agustin Vivas","pts":800,"tg":1,"id":88},{"pos":88,"name":"Pedro Crespo","pts":800,"tg":0,"id":89},{"pos":88,"name":"Facundo Cabanillas","pts":800,"tg":0,"id":90},{"pos":88,"name":"Santiago Lo Celso","pts":800,"tg":0,"id":91},{"pos":88,"name":"Bautista Ferreyra","pts":800,"tg":0,"id":92},{"pos":88,"name":"Luis Peñaloza","pts":800,"tg":0,"id":93},{"pos":88,"name":"Benjamin Andrada","pts":800,"tg":0,"id":94},{"pos":88,"name":"Juan Mena","pts":800,"tg":0,"id":95},{"pos":88,"name":"Christian Spinetti","pts":800,"tg":1,"id":96},{"pos":88,"name":"Diego Konicoff","pts":800,"tg":0,"id":97},{"pos":88,"name":"Genaro Ballabriga","pts":800,"tg":0,"id":98},{"pos":88,"name":"Federico Ferreyra","pts":800,"tg":0,"id":99},{"pos":88,"name":"Santiago Sponer","pts":800,"tg":0,"id":100},{"pos":88,"name":"Lucas Fuentes","pts":800,"tg":1,"id":101},{"pos":102,"name":"Lucas Garcia","pts":600,"tg":0,"id":102},{"pos":102,"name":"Fernando Laquiz","pts":600,"tg":0,"id":103},{"pos":102,"name":"Ricardo Sayas","pts":600,"tg":0,"id":104},{"pos":102,"name":"Sebastian Ibarra","pts":600,"tg":0,"id":105},{"pos":102,"name":"Tomas Ibarra","pts":600,"tg":0,"id":106},{"pos":102,"name":"Franco Sessa","pts":600,"tg":0,"id":107},{"pos":102,"name":"Lucas Galindez","pts":600,"tg":0,"id":108},{"pos":102,"name":"Agustin Gonzalez","pts":600,"tg":0,"id":109},{"pos":102,"name":"Lucas Garzon","pts":600,"tg":0,"id":110},{"pos":102,"name":"Diego Borgoglio","pts":600,"tg":0,"id":111},{"pos":102,"name":"Agustin Caceres","pts":600,"tg":0,"id":112},{"pos":102,"name":"Martin Goino","pts":600,"tg":0,"id":113},{"pos":102,"name":"Pablo Aguero","pts":600,"tg":0,"id":114},{"pos":102,"name":"Marcelo Cepulver","pts":600,"tg":0,"id":115},{"pos":102,"name":"Damian Vega","pts":600,"tg":0,"id":116},{"pos":102,"name":"Martin Oliva","pts":600,"tg":0,"id":117},{"pos":102,"name":"Santiago Mendieta","pts":600,"tg":0,"id":118},{"pos":102,"name":"Bruno Perez","pts":600,"tg":0,"id":119},{"pos":102,"name":"Ezequiel Rosso","pts":600,"tg":0,"id":120},{"pos":102,"name":"Federico Carbonara","pts":600,"tg":0,"id":121},{"pos":102,"name":"Matias Cornejo","pts":600,"tg":0,"id":122},{"pos":102,"name":"Lucas Martinez","pts":600,"tg":0,"id":123},{"pos":102,"name":"Adrian Castillo","pts":600,"tg":0,"id":124},{"pos":102,"name":"Juan Romero","pts":600,"tg":0,"id":125},{"pos":102,"name":"Daniel Melida","pts":600,"tg":0,"id":126},{"pos":102,"name":"Andres Moyano","pts":600,"tg":0,"id":127},{"pos":102,"name":"Federico Davies","pts":600,"tg":0,"id":128},{"pos":129,"name":"Hernan Valenci","pts":500,"tg":1,"id":129},{"pos":129,"name":"Nicolas Ranzuglia","pts":500,"tg":1,"id":130},{"pos":129,"name":"Javier Ranzuglia","pts":500,"tg":1,"id":131},{"pos":129,"name":"David Ruiz","pts":500,"tg":1,"id":132},{"pos":129,"name":"Rafael Maldonado","pts":500,"tg":1,"id":133},{"pos":129,"name":"Mario Vische","pts":500,"tg":1,"id":134},{"pos":129,"name":"Alberto Stekelberg","pts":500,"tg":1,"id":135},{"pos":129,"name":"Alan Carrasco","pts":500,"tg":0,"id":136},{"pos":129,"name":"Agustin Gallardo","pts":500,"tg":0,"id":137},{"pos":129,"name":"Valentin Mitre","pts":500,"tg":0,"id":138},{"pos":129,"name":"Cristian Machado","pts":500,"tg":0,"id":139},{"pos":129,"name":"Nicolas Avendaño","pts":500,"tg":0,"id":140},{"pos":129,"name":"Marcos Benedette","pts":500,"tg":0,"id":141},{"pos":129,"name":"Santiago Aguirre","pts":500,"tg":0,"id":142},{"pos":129,"name":"Juan Carlos Laquiz","pts":500,"tg":0,"id":143},{"pos":129,"name":"Jonathan Farias","pts":500,"tg":0,"id":144},{"pos":129,"name":"Pablo Barteik","pts":500,"tg":0,"id":145},{"pos":129,"name":"Jose Fessia","pts":500,"tg":0,"id":146},{"pos":129,"name":"Luciano Ranzoni","pts":500,"tg":0,"id":147},{"pos":129,"name":"Uriel Guevara","pts":500,"tg":0,"id":148},{"pos":129,"name":"Valentino Machado","pts":500,"tg":0,"id":149},{"pos":129,"name":"Felipe Ascanelli","pts":500,"tg":0,"id":150},{"pos":129,"name":"Maximiliano Aradas","pts":500,"tg":0,"id":151},{"pos":152,"name":"Matias Ruiz","pts":400,"tg":0,"id":152},{"pos":152,"name":"Alan Rossetto","pts":400,"tg":0,"id":153},{"pos":152,"name":"Sebastian Salazar","pts":400,"tg":0,"id":154},{"pos":152,"name":"Miguel Gontero","pts":400,"tg":0,"id":155},{"pos":152,"name":"Mauricio Brasca","pts":400,"tg":0,"id":156},{"pos":152,"name":"Matias Abaca","pts":400,"tg":0,"id":157},{"pos":152,"name":"David Delgado","pts":400,"tg":0,"id":158},{"pos":152,"name":"Dario Gutierrez","pts":400,"tg":0,"id":159},{"pos":160,"name":"Emiliano Moreno","pts":300,"tg":0,"id":160},{"pos":160,"name":"Claudio Furrer","pts":300,"tg":0,"id":161},{"pos":160,"name":"Juan Ascanelli","pts":300,"tg":0,"id":162},{"pos":160,"name":"Gonzalo Lopez","pts":300,"tg":0,"id":163},{"pos":160,"name":"Emiliano Vargas","pts":300,"tg":0,"id":164},{"pos":160,"name":"Cesar Ynfante","pts":300,"tg":0,"id":165}],"6ta":[{"pos":1,"name":"Diego Zapata","pts":13400,"tg":7,"id":166},{"pos":2,"name":"Franco Varela","pts":6200,"tg":1,"id":167},{"pos":3,"name":"Rodrigo Carrizo","pts":2100,"tg":1,"id":169},{"pos":4,"name":"Luis Alberto Villegas","pts":2000,"tg":1,"id":168},{"pos":5,"name":"Leandro Figueroa","pts":1900,"tg":1,"id":172},{"pos":6,"name":"Alejandro Olivera","pts":1800,"tg":1,"id":170},{"pos":6,"name":"Franco Olocco","pts":1800,"tg":0,"id":171},{"pos":8,"name":"Gonzalo Quintana","pts":1700,"tg":1,"id":173},{"pos":9,"name":"Santiago Tomassi","pts":1600,"tg":1,"id":174},{"pos":9,"name":"Juan Machado","pts":1600,"tg":1,"id":175},{"pos":9,"name":"Lucas Ponce","pts":1600,"tg":1,"id":176},{"pos":9,"name":"Tobias Lopez","pts":1600,"tg":1,"id":177},{"pos":9,"name":"Leandro Sposito","pts":1600,"tg":1,"id":178},{"pos":9,"name":"Franco Giraudo","pts":1600,"tg":0,"id":179},{"pos":15,"name":"Diego Fernandez","pts":1500,"tg":1,"id":185},{"pos":15,"name":"Santiago Bulfoni","pts":1500,"tg":1,"id":186},{"pos":17,"name":"Matias De La Vega","pts":1400,"tg":1,"id":180},{"pos":17,"name":"Gaston Valenzuela","pts":1400,"tg":1,"id":181},{"pos":17,"name":"Diego Banon","pts":1400,"tg":1,"id":182},{"pos":17,"name":"Andres Barrionuevo","pts":1400,"tg":1,"id":183},{"pos":17,"name":"David Peralta","pts":1400,"tg":1,"id":184},{"pos":22,"name":"Mateo Rodriguez","pts":1300,"tg":1,"id":187},{"pos":23,"name":"Leonardo Piotti","pts":1200,"tg":0,"id":188},{"pos":23,"name":"Alan Carrasco","pts":1200,"tg":0,"id":189},{"pos":23,"name":"Leandro Spotti","pts":1200,"tg":0,"id":190},{"pos":23,"name":"Mauro Vallejos","pts":1200,"tg":0,"id":191},{"pos":27,"name":"Agustin Virgolini","pts":1100,"tg":0,"id":192},{"pos":27,"name":"Matias Soto","pts":1100,"tg":0,"id":193},{"pos":27,"name":"Jose De La Peña","pts":1100,"tg":0,"id":194},{"pos":27,"name":"Facundo Duca","pts":1100,"tg":1,"id":195},{"pos":27,"name":"Daniel Heredia","pts":1100,"tg":1,"id":196},{"pos":32,"name":"Gonzalo Mozzoni","pts":1000,"tg":1,"id":197},{"pos":32,"name":"Enrique Pisani","pts":1000,"tg":1,"id":198},{"pos":32,"name":"Matias Reynozo","pts":1000,"tg":1,"id":199},{"pos":32,"name":"Lucas Insaurralde","pts":1000,"tg":1,"id":200},{"pos":32,"name":"Roberto Sanz","pts":1000,"tg":1,"id":201},{"pos":32,"name":"Pablo Freidenberger","pts":1000,"tg":1,"id":202},{"pos":32,"name":"Marcelo Campisano","pts":1000,"tg":1,"id":203},{"pos":32,"name":"Juan Ignacio Palavecino","pts":1000,"tg":1,"id":204},{"pos":32,"name":"Emanuel Vivarelli","pts":1000,"tg":1,"id":205},{"pos":32,"name":"Alexis Escobedo","pts":1000,"tg":1,"id":206},{"pos":32,"name":"Milton Leiva","pts":1000,"tg":1,"id":207},{"pos":32,"name":"Juan Maghini","pts":1000,"tg":0,"id":208},{"pos":32,"name":"Diego Acevedo","pts":1000,"tg":0,"id":209},{"pos":32,"name":"David Avila","pts":1000,"tg":0,"id":210},{"pos":46,"name":"Enrique Sueldo","pts":900,"tg":0,"id":211},{"pos":46,"name":"Francisco Villalonga","pts":900,"tg":0,"id":212},{"pos":48,"name":"Agustin Fernandez","pts":800,"tg":1,"id":213},{"pos":48,"name":"Martin Ahumada","pts":800,"tg":1,"id":214},{"pos":48,"name":"Tomas Alvarez","pts":800,"tg":1,"id":215},{"pos":48,"name":"Mateo Oliva","pts":800,"tg":1,"id":216},{"pos":48,"name":"Agustin Machado","pts":800,"tg":1,"id":217},{"pos":48,"name":"Cesar Jatal","pts":800,"tg":1,"id":218},{"pos":48,"name":"Martin Rodriguez","pts":800,"tg":1,"id":219},{"pos":48,"name":"Pablo Cardozo","pts":800,"tg":1,"id":220},{"pos":48,"name":"Valentino Porcel","pts":800,"tg":1,"id":221},{"pos":48,"name":"Octavio Elias","pts":800,"tg":0,"id":222},{"pos":48,"name":"Marcos Pereyra","pts":800,"tg":0,"id":223},{"pos":48,"name":"Luciano Bistocco","pts":800,"tg":0,"id":224},{"pos":48,"name":"Mateo Moreno","pts":800,"tg":0,"id":225},{"pos":61,"name":"Hernan Zuliani","pts":700,"tg":0,"id":226},{"pos":62,"name":"Juan Cruz Ferreyra","pts":600,"tg":0,"id":227},{"pos":62,"name":"Agustin Ferreyra","pts":600,"tg":0,"id":228},{"pos":62,"name":"Lucas Gomez","pts":600,"tg":0,"id":229},{"pos":62,"name":"Facundo Jure","pts":600,"tg":0,"id":230},{"pos":62,"name":"Pedro Jure","pts":600,"tg":0,"id":231},{"pos":62,"name":"Tomas Marinsalda","pts":600,"tg":0,"id":232},{"pos":62,"name":"Javier Ranzuglia","pts":600,"tg":0,"id":233},{"pos":62,"name":"Nicolas Ranzuglia","pts":600,"tg":0,"id":234},{"pos":62,"name":"Marcelo Pilla","pts":600,"tg":0,"id":235},{"pos":62,"name":"German Leguizamon","pts":600,"tg":0,"id":236},{"pos":62,"name":"Manuel Amuchastegui","pts":600,"tg":0,"id":237},{"pos":62,"name":"Maiko Colazo","pts":600,"tg":0,"id":238},{"pos":62,"name":"Ramiro Bossa","pts":600,"tg":0,"id":239},{"pos":62,"name":"Lucas Colombo","pts":600,"tg":0,"id":240},{"pos":62,"name":"Tiago Buteler","pts":600,"tg":0,"id":241},{"pos":62,"name":"David Contreras","pts":600,"tg":0,"id":242},{"pos":62,"name":"Alexis Altamirano","pts":600,"tg":0,"id":243},{"pos":62,"name":"Nahuel Monteros","pts":600,"tg":0,"id":244},{"pos":62,"name":"Javier Nuñez","pts":600,"tg":0,"id":245},{"pos":62,"name":"Juan Duran","pts":600,"tg":0,"id":246},{"pos":62,"name":"Ariel Pinto","pts":600,"tg":0,"id":247},{"pos":62,"name":"Augusto Luna","pts":600,"tg":0,"id":248},{"pos":62,"name":"Maxi Tarnowski","pts":600,"tg":0,"id":249},{"pos":62,"name":"Juan Pablo Ramirez","pts":600,"tg":0,"id":250},{"pos":62,"name":"Alexis Gutierrez","pts":600,"tg":0,"id":251},{"pos":62,"name":"Juan Bustos","pts":600,"tg":0,"id":252},{"pos":88,"name":"Manuel Gonzalez","pts":500,"tg":1,"id":253},{"pos":88,"name":"Mariano Romero","pts":500,"tg":1,"id":254},{"pos":88,"name":"Ignacio Herrera","pts":500,"tg":1,"id":255},{"pos":88,"name":"Matias Vega","pts":500,"tg":1,"id":256},{"pos":88,"name":"Gaston Flores","pts":500,"tg":0,"id":257},{"pos":88,"name":"Gino Cudini","pts":500,"tg":0,"id":258},{"pos":88,"name":"Sergio Martinez","pts":500,"tg":0,"id":259},{"pos":88,"name":"Jeremias Sperandini","pts":500,"tg":0,"id":260},{"pos":88,"name":"Fede Brizuela","pts":500,"tg":0,"id":261},{"pos":88,"name":"Alejandro Molina","pts":500,"tg":0,"id":262},{"pos":98,"name":"Joaquin Adanto","pts":400,"tg":0,"id":263},{"pos":98,"name":"Nicolas Torres","pts":400,"tg":0,"id":264},{"pos":98,"name":"Carlos Alamo","pts":400,"tg":0,"id":265},{"pos":98,"name":"Sergio Alamo","pts":400,"tg":0,"id":266},{"pos":98,"name":"Ezequiel Pompolo","pts":400,"tg":0,"id":267},{"pos":98,"name":"Jorge Dublanc","pts":400,"tg":0,"id":268},{"pos":98,"name":"Joaquin Cabral","pts":400,"tg":0,"id":269},{"pos":98,"name":"Ramiro Rojo","pts":400,"tg":0,"id":270},{"pos":98,"name":"Bruno Santena","pts":400,"tg":0,"id":271},{"pos":98,"name":"Gonzalo Rivera","pts":400,"tg":0,"id":272},{"pos":98,"name":"Victor Rosales","pts":400,"tg":0,"id":273},{"pos":98,"name":"Rodrigo Tavolieri","pts":400,"tg":0,"id":274},{"pos":98,"name":"Jorge Guzman","pts":400,"tg":0,"id":275},{"pos":98,"name":"Santiago Ruiz","pts":400,"tg":0,"id":276},{"pos":98,"name":"Gabriel Baez","pts":400,"tg":0,"id":277},{"pos":98,"name":"Javier Nogales","pts":400,"tg":0,"id":278},{"pos":98,"name":"Joaquin Lloves","pts":400,"tg":0,"id":279},{"pos":98,"name":"Franco Virga","pts":400,"tg":0,"id":280},{"pos":98,"name":"Christian Rodriguez","pts":400,"tg":0,"id":281},{"pos":98,"name":"Salvador Ripoll","pts":400,"tg":0,"id":282},{"pos":118,"name":"Enzo Roldan","pts":300,"tg":0,"id":283},{"pos":118,"name":"Nicolas Luque","pts":300,"tg":0,"id":284},{"pos":118,"name":"Jorge Martin","pts":300,"tg":0,"id":285}],"7ma":[{"pos":1,"name":"Fede Torrez","pts":15800,"tg":7,"id":286},{"pos":2,"name":"Francisco Correa","pts":8800,"tg":2,"id":287},{"pos":3,"name":"Maxi Gomez","pts":5600,"tg":2,"id":288},{"pos":4,"name":"Valentin Rosales","pts":5400,"tg":3,"id":289},{"pos":5,"name":"Maximiliano Fujisawa","pts":3000,"tg":1,"id":290},{"pos":6,"name":"Marcelo Caldera","pts":2800,"tg":2,"id":291},{"pos":7,"name":"Martin Hernandez","pts":2300,"tg":1,"id":292},{"pos":8,"name":"Valentino Beriani","pts":2000,"tg":0,"id":293},{"pos":8,"name":"Jeronimo Beriani","pts":2000,"tg":0,"id":294},{"pos":10,"name":"Josias Vasquez","pts":1800,"tg":1,"id":295},{"pos":11,"name":"Martin Nieto","pts":1600,"tg":1,"id":296},{"pos":11,"name":"Matias Amuchastegui","pts":1600,"tg":1,"id":297},{"pos":11,"name":"Juan Molina","pts":1600,"tg":1,"id":298},{"pos":14,"name":"Martin Fernandez","pts":1400,"tg":1,"id":299},{"pos":14,"name":"Eliezer Puleo","pts":1400,"tg":0,"id":300},{"pos":14,"name":"Exequiel Fontana","pts":1400,"tg":0,"id":301},{"pos":14,"name":"Luciano Ramallo","pts":1400,"tg":0,"id":302},{"pos":18,"name":"Sebastian Brines","pts":1200,"tg":1,"id":303},{"pos":19,"name":"Juan Ignacio Chesta","pts":1100,"tg":1,"id":304},{"pos":20,"name":"Federico Gonzalez","pts":1000,"tg":0,"id":305},{"pos":20,"name":"Maximo Minuet","pts":1000,"tg":1,"id":306},{"pos":20,"name":"Lucas Perciavalle","pts":1000,"tg":1,"id":307},{"pos":20,"name":"Thiago Lucero","pts":1000,"tg":0,"id":308},{"pos":20,"name":"Bruno Arzamendia","pts":1000,"tg":1,"id":309},{"pos":20,"name":"Maxi Montero","pts":1000,"tg":1,"id":310},{"pos":20,"name":"Martin Bustamante","pts":1000,"tg":1,"id":311},{"pos":20,"name":"Renzo Bustamante","pts":1000,"tg":1,"id":312},{"pos":20,"name":"Gustavo Diaz","pts":1000,"tg":1,"id":313},{"pos":20,"name":"Franco Boneu","pts":1000,"tg":1,"id":314},{"pos":20,"name":"Adrian Nieto","pts":1000,"tg":1,"id":315},{"pos":31,"name":"Ezequiel Canton","pts":900,"tg":0,"id":316},{"pos":32,"name":"Gustavo Martinez","pts":800,"tg":0,"id":317},{"pos":32,"name":"Joaquin Bianconi","pts":800,"tg":0,"id":318},{"pos":32,"name":"Hugo Andrada","pts":800,"tg":1,"id":319},{"pos":32,"name":"Maximiliano Flores","pts":800,"tg":0,"id":320},{"pos":32,"name":"Gabriel Blanco","pts":800,"tg":1,"id":321},{"pos":32,"name":"Tomas Berno","pts":800,"tg":1,"id":322},{"pos":32,"name":"Sebastian Luna","pts":800,"tg":1,"id":323},{"pos":32,"name":"Valentin Reviglio","pts":800,"tg":0,"id":324},{"pos":32,"name":"Carlos Miño","pts":800,"tg":0,"id":325},{"pos":32,"name":"Octavio Morero","pts":800,"tg":0,"id":326},{"pos":32,"name":"Gonzalo Sviglio","pts":800,"tg":0,"id":327},{"pos":32,"name":"Nery Sajama","pts":800,"tg":0,"id":328},{"pos":32,"name":"Alfre Acevedo","pts":800,"tg":0,"id":329},{"pos":32,"name":"Leonardo Albornoz","pts":800,"tg":1,"id":330},{"pos":32,"name":"Lucas Castro","pts":800,"tg":0,"id":331},{"pos":32,"name":"Miguel Ramires","pts":800,"tg":0,"id":332},{"pos":48,"name":"Marcelo Juarez","pts":600,"tg":0,"id":333},{"pos":48,"name":"Tomas Rosso","pts":600,"tg":0,"id":334},{"pos":48,"name":"Gaston Monaco","pts":600,"tg":0,"id":335},{"pos":48,"name":"Jesus Lasoy","pts":600,"tg":0,"id":336},{"pos":48,"name":"Lautaro Brizuela","pts":600,"tg":0,"id":337},{"pos":48,"name":"Manuel Nigra","pts":600,"tg":0,"id":338},{"pos":48,"name":"Juan Pablo Bertorello","pts":600,"tg":0,"id":339},{"pos":48,"name":"Alejandro Bustamante","pts":600,"tg":0,"id":340},{"pos":48,"name":"German Bustamante","pts":600,"tg":0,"id":341},{"pos":48,"name":"Franco Herrera","pts":600,"tg":0,"id":342},{"pos":48,"name":"Santiago Buteler","pts":600,"tg":0,"id":343},{"pos":48,"name":"Agustin Cottonaro","pts":600,"tg":0,"id":344},{"pos":48,"name":"Ramiro Buxo","pts":600,"tg":0,"id":345},{"pos":48,"name":"Ernesto Minuti","pts":600,"tg":0,"id":346},{"pos":48,"name":"Jeremias Aldecoa","pts":600,"tg":0,"id":347},{"pos":48,"name":"Lucas Andino","pts":600,"tg":0,"id":348},{"pos":48,"name":"Juan Cruz Storti","pts":600,"tg":0,"id":349},{"pos":48,"name":"Pablo Caldo","pts":600,"tg":0,"id":350},{"pos":66,"name":"Leonel Heredia","pts":500,"tg":0,"id":351},{"pos":66,"name":"Luciano Coll","pts":500,"tg":0,"id":352},{"pos":66,"name":"Lucas Acosta","pts":500,"tg":0,"id":353},{"pos":66,"name":"Jona Muñoz","pts":500,"tg":0,"id":354},{"pos":66,"name":"Dylan Ozan","pts":500,"tg":0,"id":355},{"pos":66,"name":"Conrado Zito","pts":500,"tg":0,"id":356},{"pos":72,"name":"Mauro Vidal","pts":400,"tg":0,"id":357},{"pos":72,"name":"Juan Cisneros","pts":400,"tg":0,"id":358},{"pos":72,"name":"Valentin Canelo","pts":400,"tg":0,"id":359},{"pos":72,"name":"Valentin Diaz","pts":400,"tg":0,"id":360},{"pos":72,"name":"Claudio Varela","pts":400,"tg":0,"id":361},{"pos":72,"name":"Diego Lazaro","pts":400,"tg":0,"id":362},{"pos":72,"name":"Andres Garcia","pts":400,"tg":0,"id":363},{"pos":72,"name":"Franco Olocco","pts":400,"tg":0,"id":364},{"pos":72,"name":"Pablo Cardozo","pts":400,"tg":0,"id":365},{"pos":72,"name":"Valentin Novau","pts":400,"tg":0,"id":366},{"pos":72,"name":"Francisco Bedini","pts":400,"tg":0,"id":367},{"pos":72,"name":"Daniel Hernandez","pts":400,"tg":0,"id":368},{"pos":72,"name":"Facundo Zorrilla","pts":400,"tg":0,"id":369},{"pos":72,"name":"Valentin Zarate","pts":400,"tg":0,"id":370},{"pos":72,"name":"Franco Fujisawa","pts":400,"tg":0,"id":371},{"pos":72,"name":"Ivan Brochero","pts":400,"tg":0,"id":372},{"pos":72,"name":"Franco Paisio","pts":400,"tg":0,"id":373},{"pos":89,"name":"Jose Orlando","pts":300,"tg":0,"id":374},{"pos":89,"name":"Santiago Villagra","pts":300,"tg":0,"id":375}],"8va":[{"pos":1,"name":"Federico Inda","pts":2300,"tg":0,"id":376},{"pos":2,"name":"Dario Fontana","pts":2100,"tg":0,"id":377},{"pos":3,"name":"Misael Moreno","pts":2000,"tg":0,"id":378},{"pos":3,"name":"Alejandro Denis Palou","pts":2000,"tg":0,"id":379},{"pos":3,"name":"Matias Siles","pts":2000,"tg":0,"id":380},{"pos":6,"name":"Leandro Tisera","pts":1800,"tg":0,"id":381},{"pos":7,"name":"Hernan Alba","pts":1200,"tg":0,"id":382},{"pos":7,"name":"Luis Chagaray","pts":1200,"tg":0,"id":383},{"pos":9,"name":"Oscar Ferreyra","pts":1000,"tg":1,"id":384},{"pos":9,"name":"Marcos Strasorier","pts":1000,"tg":1,"id":385},{"pos":9,"name":"Juan Pablo Luna","pts":1000,"tg":1,"id":386},{"pos":9,"name":"Pablo Lopez","pts":1000,"tg":1,"id":387},{"pos":9,"name":"Martin Diaz","pts":1000,"tg":1,"id":388},{"pos":9,"name":"Fredy Argañaraz","pts":1000,"tg":1,"id":389},{"pos":9,"name":"Alejando Dominguez","pts":1000,"tg":1,"id":390},{"pos":9,"name":"Agustin Vanay","pts":1000,"tg":1,"id":391},{"pos":17,"name":"Francisco Rivara","pts":900,"tg":0,"id":392},{"pos":18,"name":"Hugo Cabreira","pts":800,"tg":1,"id":393},{"pos":18,"name":"Matias Quartucci","pts":800,"tg":1,"id":394},{"pos":18,"name":"Juan Pablo Atan","pts":800,"tg":1,"id":395},{"pos":18,"name":"Ignacio Ferreyra","pts":800,"tg":0,"id":396},{"pos":18,"name":"Agustin Gazzaniga","pts":800,"tg":0,"id":397},{"pos":18,"name":"Rodrigo Gallardo","pts":800,"tg":0,"id":398},{"pos":18,"name":"Emanuel Anrriquez","pts":800,"tg":0,"id":399},{"pos":18,"name":"Fernando Feans","pts":800,"tg":0,"id":400},{"pos":26,"name":"Lautaro Garcia","pts":600,"tg":0,"id":401},{"pos":26,"name":"Lautaro Arratia","pts":600,"tg":0,"id":402},{"pos":26,"name":"Tomas Guirlli","pts":600,"tg":0,"id":403},{"pos":26,"name":"Diego Guirlli","pts":600,"tg":0,"id":404},{"pos":26,"name":"Andres Flores","pts":600,"tg":0,"id":405},{"pos":26,"name":"Maximiliano Moreyra","pts":600,"tg":0,"id":406},{"pos":26,"name":"Fernando Ludueña","pts":600,"tg":0,"id":407},{"pos":26,"name":"Ignacio Pereyra Esquivel","pts":600,"tg":0,"id":408},{"pos":26,"name":"Hugo Duartez","pts":600,"tg":0,"id":409},{"pos":26,"name":"Lautaro Gonzalez","pts":600,"tg":0,"id":410},{"pos":26,"name":"Thomas Duarte","pts":600,"tg":0,"id":411},{"pos":37,"name":"Alesio Giudice","pts":500,"tg":0,"id":412},{"pos":38,"name":"Danilo De Paul","pts":400,"tg":0,"id":413},{"pos":38,"name":"Roman Requena","pts":400,"tg":0,"id":414},{"pos":38,"name":"Fernando Giarratana","pts":400,"tg":0,"id":415},{"pos":38,"name":"Juan Gomez","pts":400,"tg":0,"id":416},{"pos":38,"name":"Santiago Valles","pts":400,"tg":0,"id":417},{"pos":38,"name":"Emmanuel Sanchez","pts":400,"tg":0,"id":418},{"pos":38,"name":"Diego Masmas","pts":400,"tg":0,"id":419},{"pos":38,"name":"Nahuel Paz","pts":400,"tg":0,"id":420},{"pos":38,"name":"Alex Toranzo","pts":400,"tg":0,"id":421},{"pos":38,"name":"Nicolas Salvatierra","pts":400,"tg":0,"id":422},{"pos":38,"name":"Cristian Grion","pts":400,"tg":0,"id":423},{"pos":38,"name":"Juan Francisco Romano","pts":400,"tg":0,"id":424},{"pos":38,"name":"German Ortega","pts":400,"tg":0,"id":425},{"pos":38,"name":"Leonardo Albornoz","pts":400,"tg":0,"id":426},{"pos":38,"name":"Mateo Gonzalez","pts":400,"tg":0,"id":427},{"pos":38,"name":"Nicolas Peyracchia","pts":400,"tg":0,"id":428},{"pos":38,"name":"Francisco Calvo","pts":400,"tg":0,"id":429},{"pos":38,"name":"Jonathan Bazan","pts":400,"tg":0,"id":430},{"pos":38,"name":"Matias Pereyra","pts":400,"tg":0,"id":431},{"pos":38,"name":"Matias Gonzalez","pts":400,"tg":0,"id":432},{"pos":38,"name":"Francisco Correa","pts":400,"tg":0,"id":433},{"pos":38,"name":"Valentino Chattas","pts":400,"tg":0,"id":434},{"pos":38,"name":"Gabriel Siles","pts":400,"tg":0,"id":435},{"pos":38,"name":"Gonzalo Gimenez","pts":400,"tg":0,"id":436},{"pos":62,"name":"Lautaro Martin","pts":300,"tg":0,"id":437},{"pos":62,"name":"Celin Diaz","pts":300,"tg":0,"id":438}]},"fem":{"4ta/5ta":[{"pos":1,"name":"Melanie Cordoba","pts":6900,"tg":2,"id":439},{"pos":2,"name":"Valentina Marquardt","pts":4800,"tg":4,"id":440},{"pos":3,"name":"Andrea Carreras","pts":1600,"tg":1,"id":441},{"pos":4,"name":"Micaela Saire","pts":500,"tg":0,"id":442},{"pos":5,"name":"Yanina Rosales","pts":400,"tg":0,"id":443}],"6ta":[{"pos":1,"name":"Noe Toledo","pts":7300,"tg":2,"id":444},{"pos":2,"name":"Ivana Allende","pts":2100,"tg":0,"id":445},{"pos":3,"name":"Agustina Gomez Perez","pts":1400,"tg":1,"id":446},{"pos":4,"name":"Soledad Jabif","pts":1100,"tg":0,"id":447},{"pos":5,"name":"Gimena Perez","pts":1000,"tg":1,"id":448},{"pos":5,"name":"Ingrid Magnano","pts":1000,"tg":1,"id":449},{"pos":7,"name":"Lucia Trigos","pts":800,"tg":0,"id":450},{"pos":7,"name":"Valentina Angilello","pts":800,"tg":0,"id":451},{"pos":7,"name":"Yasmin Yammal","pts":800,"tg":0,"id":452},{"pos":7,"name":"Regina Marquez","pts":800,"tg":1,"id":453},{"pos":7,"name":"Rocio Perez","pts":800,"tg":1,"id":454},{"pos":12,"name":"Abigail Ropoz","pts":600,"tg":0,"id":455},{"pos":12,"name":"Sofia Cordoba","pts":600,"tg":0,"id":456},{"pos":14,"name":"Sol Prieto","pts":400,"tg":0,"id":457},{"pos":14,"name":"Veronica Reyna","pts":400,"tg":0,"id":458}],"7ma":[{"pos":1,"name":"Martina Jaramillo","pts":2200,"tg":0,"id":459},{"pos":1,"name":"Melina Oliva","pts":2200,"tg":0,"id":460},{"pos":3,"name":"Evelyn Cwirko","pts":1900,"tg":1,"id":461},{"pos":4,"name":"Adriana Martin","pts":1800,"tg":1,"id":462},{"pos":5,"name":"Lara Nigra","pts":1200,"tg":0,"id":463},{"pos":5,"name":"Brenda Frias","pts":1200,"tg":0,"id":464},{"pos":5,"name":"Geo Minuti","pts":1200,"tg":0,"id":465},{"pos":8,"name":"Agustina Cornejo","pts":1100,"tg":0,"id":466},{"pos":8,"name":"Sofia Movsesian","pts":1100,"tg":0,"id":467},{"pos":10,"name":"Jime Sposito","pts":1000,"tg":1,"id":468},{"pos":11,"name":"Viviana Rocha","pts":800,"tg":0,"id":469},{"pos":11,"name":"Carolina Ferreyra","pts":800,"tg":0,"id":470},{"pos":11,"name":"Priscila Acosta","pts":800,"tg":0,"id":471},{"pos":11,"name":"Naihara Rojas","pts":800,"tg":0,"id":472},{"pos":15,"name":"Noelia Heredia","pts":600,"tg":0,"id":473},{"pos":15,"name":"Abril Nigra","pts":600,"tg":0,"id":474},{"pos":15,"name":"Karen Villa","pts":600,"tg":0,"id":475},{"pos":15,"name":"Fiorella Mattar","pts":600,"tg":0,"id":476},{"pos":15,"name":"Tamara Cuevas","pts":600,"tg":0,"id":477},{"pos":15,"name":"Mickaela Arcando","pts":600,"tg":0,"id":478},{"pos":15,"name":"Lucila Barbero","pts":600,"tg":0,"id":479},{"pos":15,"name":"Flor Bolatti","pts":600,"tg":0,"id":480},{"pos":15,"name":"Julia Schulz","pts":600,"tg":0,"id":481},{"pos":15,"name":"Guada Castaño","pts":600,"tg":0,"id":482},{"pos":25,"name":"Vanesa Varela","pts":400,"tg":0,"id":483},{"pos":25,"name":"Vane Herrero","pts":400,"tg":0,"id":484},{"pos":25,"name":"Noelia Degiovanni","pts":400,"tg":0,"id":485},{"pos":25,"name":"Natalia Miller","pts":400,"tg":0,"id":486},{"pos":25,"name":"Melisa Brouchy","pts":400,"tg":0,"id":487},{"pos":25,"name":"Maria Ferreyrra","pts":400,"tg":0,"id":488},{"pos":31,"name":"Brenda Rios","pts":300,"tg":0,"id":489}],"8va":[{"pos":1,"name":"Chiara Larre","pts":1700,"tg":0,"id":490},{"pos":2,"name":"Julieta Linares","pts":1300,"tg":1,"id":491},{"pos":3,"name":"Cecilia De Blassi","pts":1200,"tg":0,"id":492},{"pos":4,"name":"Barbara Barolat","pts":1000,"tg":1,"id":493},{"pos":4,"name":"Estefania Maaorenzinc","pts":1000,"tg":1,"id":494},{"pos":6,"name":"Morena Caminos","pts":900,"tg":0,"id":495},{"pos":6,"name":"Lara Diaz","pts":900,"tg":0,"id":496},{"pos":8,"name":"Fernanda Risso","pts":800,"tg":0,"id":497},{"pos":8,"name":"Veronica Gil","pts":800,"tg":0,"id":498},{"pos":10,"name":"Jesica Sala","pts":600,"tg":0,"id":499},{"pos":10,"name":"Luciana Pacho","pts":600,"tg":0,"id":500},{"pos":10,"name":"Priscila Tejerina","pts":600,"tg":0,"id":501},{"pos":13,"name":"Karina Zeverin","pts":500,"tg":1,"id":502},{"pos":13,"name":"Cecilia Mastrocola","pts":500,"tg":1,"id":503},{"pos":13,"name":"Alejandra Zambrano","pts":500,"tg":1,"id":504},{"pos":16,"name":"Lucia Chincarini","pts":400,"tg":0,"id":505},{"pos":16,"name":"Lucia Lopez","pts":400,"tg":0,"id":506},{"pos":16,"name":"Rocio Pailos","pts":400,"tg":0,"id":507},{"pos":16,"name":"Araceli Jover","pts":400,"tg":0,"id":508},{"pos":20,"name":"Natalina Agüero","pts":300,"tg":0,"id":509},{"pos":20,"name":"Martina Buffa","pts":300,"tg":0,"id":510}]}};
+  /* ====== FIREBASE ====== */
+  const firebaseConfig = {
+    apiKey: "AIzaSyBdWq8xr3eQ1b70KV8v5gvH-7d_67A0LM8",
+    authDomain: "organizacion-3j-b6724.firebaseapp.com",
+    projectId: "organizacion-3j-b6724",
+    storageBucket: "organizacion-3j-b6724.firebasestorage.app",
+    messagingSenderId: "917757467430",
+    appId: "1:917757467430:web:3c945569cdbbd4bd6a7fe7",
+    measurementId: "G-XZYWH8L5PE"
+  };
+  let db=null, docRef=null;
+  try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+  } catch(e){ console.warn('Firebase no inicializó:', e); }
+
+  // mapeo entre el doc de Firestore y el modelo interno
+  const GEN_MAP = { masc:'male', fem:'female' };
+  const CAT_MAP = { '4ta/5ta':'QUINTA', '6ta':'SEXTA', '7ma':'SEPTIMA', '8va':'OCTAVA' };
+  function fromFirestore(str){
+    let obj={}; try{ obj=JSON.parse(str)||{}; }catch(e){ return null; }
+    const out={masc:{}, fem:{}};
+    for(const [g,gk] of Object.entries(GEN_MAP)){
+      const src=obj[gk]||{};
+      for(const [c,ck] of Object.entries(CAT_MAP)){
+        out[g][c]=(src[ck]||[]).map(p=>({name:p.n, pts:+p.p||0, tg:+p.t||0, id:p.id, premio:p.premio||'', hist:Array.isArray(p.h)?p.h:[]}));
+      }
+    }
+    return out;
+  }
+  function toFirestore(RKv){
+    const obj={male:{}, female:{}};
+    for(const [g,gk] of Object.entries(GEN_MAP)){
+      for(const [c,ck] of Object.entries(CAT_MAP)){
+        obj[gk][ck]=(RKv[g][c]||[]).map((p,i)=>({n:p.name, p:+p.pts||0, t:+p.tg||0, id:(p.id!=null?p.id:i+1), premio:p.premio||'', h:Array.isArray(p.hist)?p.hist:[]}));
+      }
+    }
+    return JSON.stringify(obj);
+  }
+  /* ====================== */
+
+  /* ====== CONFIG ====== */
+  const PASSWORD = 'jaimes';   // <-- contraseña para editar
+  /* ==================== */
+
+  const cats = ['4ta/5ta','6ta','7ma','8va'];
+  let active = '4ta/5ta';
+  let editing = false;
+
+  /* ---- temporadas (archivo por año y trimestre) ---- */
+  const TRIMS = [
+    { id:'t1', label:'T1', range:'Enero – Marzo' },
+    { id:'t2', label:'T2', range:'Abril – Junio' },
+    { id:'t3', label:'T3', range:'Julio – Septiembre' },
+    { id:'t4', label:'T4', range:'Octubre – Diciembre' }
+  ];
+  const CHRONO = ['t1','t2','t3','t4']; // orden cronológico dentro de un año
+  const START_YEAR = 2026, START_IDX = 1; // el circuito arrancó en T2 2026
+  function urlParams(){ try{ return new URLSearchParams(location.search); }catch(e){ return new URLSearchParams(); } }
+  function trimFromUrl(){
+    const p=(urlParams().get('archive')||'').toLowerCase();
+    return TRIMS.some(t=>t.id===p) ? p : null;
+  }
+  function yearFromUrl(){
+    const y=parseInt(urlParams().get('ay'),10);
+    return (y && y>2000 && y<2100) ? y : new Date().getFullYear();
+  }
+  const archiveTrim = trimFromUrl();
+  const archiveYear = yearFromUrl();
+  const ARCHIVE_MODE = !!archiveTrim;
+  function buildEmptyRK(){ const o={masc:{},fem:{}}; ['masc','fem'].forEach(g=>cats.forEach(c=>o[g][c]=[])); return o; }
+
+  // datos en vivo: arranca del archivo como respaldo; Firestore lo reemplaza al conectar
+  let RK = JSON.parse(JSON.stringify(DATA));
+  function ensureShape(){
+    ['masc','fem'].forEach(g=>{ RK[g]=RK[g]||{}; cats.forEach(c=>{ RK[g][c]=RK[g][c]||[]; }); });
+  }
+  ensureShape();
+
+  const subLabelEl = document.getElementById('subLabel');
+
+  if(ARCHIVE_MODE){
+    // vista de solo lectura: la foto guardada de esa temporada
+    document.body.classList.add('archive-mode');
+    const t = TRIMS.find(x=>x.id===archiveTrim);
+    RK = buildEmptyRK();
+    docRef = db ? db.collection('ranking').doc('archive_'+archiveYear+'_'+archiveTrim) : null;
+    if(docRef){
+      docRef.get().then(snap=>{
+        const has = snap.exists && snap.data() && snap.data().data;
+        if(has){ const parsed=fromFirestore(snap.data().data); if(parsed){ RK=parsed; ensureShape(); ['masc','fem'].forEach(g=>cats.forEach(c=>{ RK[g][c]=reseed(RK[g][c]); })); } }
+        subLabelEl.textContent = 'Temporada archivada · ' + t.label + ' · ' + t.range + ' ' + archiveYear + (!has ? ' — todavía no se guardó esta temporada' : '');
+        render();
+      }).catch(()=>{ subLabelEl.textContent='No se pudo cargar la temporada.'; render(); });
+    } else {
+      subLabelEl.textContent = 'Sin conexión con la base de datos.';
+    }
+  } else {
+    // ranking en vivo: siempre editable, independiente del archivo de temporadas
+    docRef = db ? db.collection('ranking').doc('data2026') : null;
+    if(docRef){
+      docRef.onSnapshot(snap=>{
+        if(snap.exists && snap.data() && snap.data().data){
+          const parsed = fromFirestore(snap.data().data);
+          if(parsed){ RK = parsed; ensureShape(); ['masc','fem'].forEach(g=>cats.forEach(c=>{ RK[g][c]=reseed(RK[g][c]); })); if(!editing) render(); }
+        }
+      }, err=>console.warn('Firestore lectura:', err));
+    }
+  }
+
+  const tabsEl = document.getElementById('tabs');
+  cats.forEach(c=>{
+    const b=document.createElement('button'); b.className='tab'+(c===active?' on':''); b.textContent=c.toUpperCase();
+    b.onclick=()=>{active=c; [...tabsEl.children].forEach(x=>x.classList.toggle('on',x.textContent===c.toUpperCase())); render();};
+    tabsEl.appendChild(b);
+  });
+  function fmt(n){ return (n||0).toLocaleString('es-AR'); }
+
+  // ranking por competición: igual puntaje => misma posición
+  function reseed(list){
+    const sorted=[...list].sort((a,b)=> (b.pts||0)-(a.pts||0) || (b.tg||0)-(a.tg||0) );
+    let pos=0,prevPts=null,prevTg=null,seen=0;
+    sorted.forEach(r=>{ seen++; if(r.pts!==prevPts || r.tg!==prevTg){ pos=seen; prevPts=r.pts; prevTg=r.tg; } r.pos=pos; });
+    return sorted;
+  }
+
+  function renderTable(group, tbodyId, cntId, q){
+    const list = RK[group][active] || [];
+    const rows=document.getElementById(tbodyId);
+    if(editing){
+      const ranked = reseed(list); RK[group][active]=ranked;
+      const view = ranked.map((r,i)=>({r,i})).filter(o=>!q || (o.r.name||'').toLowerCase().includes(q));
+      document.getElementById(cntId).textContent = view.length + (view.length===1?' jugador':' jugadores');
+      rows.innerHTML = view.map(({r,i})=>
+        '<tr class="'+(r.pos<=3?'top':'')+'" data-i="'+i+'"><td class="pos">'+r.pos+'</td>'+
+        '<td class="edit"><span class="cell" contenteditable data-f="name">'+(r.name||'')+'</span>'+
+          (r.pos<=5 ? '<span class="prize-edit" contenteditable data-f="premio">'+(r.premio||'')+'</span>' : '')+'</td>'+
+        '<td class="edit tg"><span class="cell" contenteditable data-f="tg">'+(r.tg||0)+'</span></td>'+
+        '<td class="edit pts"><span class="cell" contenteditable data-f="pts">'+(r.pts||0)+'</span> '+
+        '<button class="del" title="Eliminar">✕</button></td></tr>'
+      ).join('') || '<tr><td colspan="4" class="empty">'+(q?'Sin resultados para “'+q+'”.':'Sin jugadores. Agregá uno abajo.')+'</td></tr>';
+      bindRow(rows, group);
+      return;
+    }
+    const f = list.map((r,i)=>({r,i})).filter(o=>!q || (o.r.name||'').toLowerCase().includes(q));
+    document.getElementById(cntId).textContent = f.length + (f.length===1?' jugador':' jugadores');
+    if(!f.length){ rows.innerHTML='<tr><td colspan="4" class="empty">Sin resultados'+(q?' para “'+q+'”':'')+'.</td></tr>'; return; }
+    rows.innerHTML=f.map(({r,i})=>
+      '<tr class="'+(r.pos<=3?'top':'')+'"><td class="pos">'+r.pos+'</td>'+
+      '<td><span class="player" data-g="'+group+'" data-i="'+i+'" title="Ver historial de puntos">'+(r.name||'')+((r.hist&&r.hist.length)?'<span class="hist-badge"></span>':'')+'</span>'+
+        (r.pos<=5 && r.premio ? '<span class="prize"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M5 5H3v2a3 3 0 0 0 3 3M19 5h2v2a3 3 0 0 1-3 3"/></svg>'+r.premio+'</span>' : '')+'</td>'+
+      '<td class="tg">'+(r.tg||0)+'</td>'+
+      '<td class="pts">'+fmt(r.pts)+'</td></tr>'
+    ).join('');
+  }
+
+  function bindRow(rows, group){
+    rows.querySelectorAll('.cell').forEach(cell=>{
+      cell.addEventListener('blur',()=>{
+        const tr=cell.closest('tr'); const i=+tr.dataset.i; const f=cell.dataset.f;
+        const row=RK[group][active][i]; if(!row) return;
+        if(f==='name'){ row.name=cell.textContent.trim(); }
+        else {
+          const val=parseInt(cell.textContent.replace(/\D/g,''),10)||0;
+          if(f==='pts'){
+            const old=row.pts||0; const delta=val-old;
+            if(delta!==0){ row.hist=Array.isArray(row.hist)?row.hist:[]; row.hist.push({p:delta, ts:new Date().toLocaleDateString('es-AR')}); }
+            row.pts=val; render();
+          } else { row[f]=val; }
+        }
+      });
+      cell.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); cell.blur(); } });
+    });
+    rows.querySelectorAll('.del').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const i=+btn.closest('tr').dataset.i;
+        RK[group][active].splice(i,1); render();
+      });
+    });
+    rows.querySelectorAll('.prize-edit[contenteditable]').forEach(cell=>{
+      cell.addEventListener('blur',()=>{
+        const i=+cell.closest('tr').dataset.i; const row=RK[group][active][i];
+        if(row){ row.premio=cell.textContent.trim(); }
+      });
+      cell.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); cell.blur(); } });
+    });
+  }
+
+  function render(){
+    const q=(document.getElementById('q').value||'').trim().toLowerCase();
+    renderTable('masc','rowsM','cntM',q);
+    renderTable('fem','rowsF','cntF',q);
+    document.querySelectorAll('.addrow').forEach(a=>a.remove());
+    if(editing){
+      addAddBtn('rowsM','masc'); addAddBtn('rowsF','fem');
+    }
+  }
+  function addAddBtn(tbodyId, group){
+    const tbl=document.getElementById(tbodyId).closest('table');
+    const wrap=document.createElement('div'); wrap.className='addrow';
+    wrap.innerHTML='<button>+ Agregar jugador</button>';
+    wrap.querySelector('button').onclick=()=>{
+      RK[group][active].push({pos:99,name:'Nuevo jugador',pts:0,tg:0});
+      render();
+      const tb=document.getElementById(tbodyId);
+      const last=tb.querySelector('tr:last-child .cell'); if(last){ last.focus(); document.getSelection().selectAllChildren(last); }
+    };
+    tbl.after(wrap);
+  }
+
+  document.getElementById('q').addEventListener('input',()=>{ render(); });
+
+  /* ---- historial de puntos por jugador ---- */
+  const histModal=document.getElementById('histModal');
+  function openHist(group, i){
+    const row=RK[group] && RK[group][active] && RK[group][active][i];
+    if(!row) return;
+    const hist=Array.isArray(row.hist)?row.hist:[];
+    document.getElementById('histName').textContent=row.name||'Jugador';
+    const total=hist.reduce((s,h)=>s+(+h.p||0),0);
+    document.getElementById('histSub').textContent=hist.length
+      ? ('Sumados en '+active.toUpperCase()+': +'+fmt(total)+' pts · '+hist.length+(hist.length===1?' carga':' cargas'))
+      : 'Todavía no se registraron cargas de puntos.';
+    const listEl=document.getElementById('histList');
+    if(!hist.length){
+      listEl.innerHTML='<div class="hist-empty">Cada vez que se editen los puntos de este jugador, la suma de ese torneo va a quedar registrada acá con su fecha.</div>';
+    } else {
+      listEl.innerHTML=hist.map((h,k)=>({h,k})).reverse().map(({h,k})=>{
+        const d=+h.p||0; const sign=d>0?'+':'';
+        return '<div class="hist-item"><span class="hist-pts'+(d<0?' neg':'')+'">'+sign+fmt(d)+' pts</span><span class="hist-date">'+(h.ts||'—')+'</span></div>';
+      }).join('');
+    }
+    histModal.classList.add('on');
+  }
+  document.addEventListener('click',e=>{
+    const el=e.target.closest('.player[data-i]');
+    if(!el) return;
+    openHist(el.dataset.g, +el.dataset.i);
+  });
+  document.getElementById('histClose').onclick=()=>histModal.classList.remove('on');
+  histModal.addEventListener('click',e=>{ if(e.target===histModal) histModal.classList.remove('on'); });
+
+  // toggle Masculino/Femenino en mobile
+  const genderToggle=document.getElementById('genderToggle'), splitEl=document.getElementById('split');
+  genderToggle.querySelectorAll('button').forEach(b=>{
+    b.onclick=()=>{
+      genderToggle.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+      splitEl.classList.toggle('m-masc', b.dataset.g==='masc');
+      splitEl.classList.toggle('m-fem', b.dataset.g==='fem');
+    };
+  });
+
+  /* ---- modo edición + contraseña ---- */
+  const pwModal=document.getElementById('pwModal'), pwInput=document.getElementById('pwInput'), pwErr=document.getElementById('pwErr');
+  const editbar=document.getElementById('editbar'), editToggle=document.getElementById('editToggle'), editToggleLbl=document.getElementById('editToggleLbl');
+
+  function openEdit(){
+    editing=true; document.body.classList.add('editing');
+    editbar.classList.add('on'); editToggle.classList.add('live'); editToggleLbl.textContent='Editando';
+    render();
+  }
+  function closeEdit(){
+    editing=false; document.body.classList.remove('editing');
+    editbar.classList.remove('on'); editToggle.classList.remove('live'); editToggleLbl.textContent='Editar';
+    render();
+  }
+
+  editToggle.onclick=()=>{
+    if(editing){ closeEdit(); return; }
+    pwErr.textContent=''; pwInput.value=''; pwModal.classList.add('on'); setTimeout(()=>pwInput.focus(),50);
+  };
+  document.getElementById('pwCancel').onclick=()=>pwModal.classList.remove('on');
+  document.getElementById('pwOk').onclick=tryPw;
+  pwInput.addEventListener('keydown',e=>{ if(e.key==='Enter') tryPw(); });
+  function tryPw(){
+    if(pwInput.value===PASSWORD){ pwModal.classList.remove('on'); openEdit(); }
+    else { pwErr.textContent='Contraseña incorrecta.'; pwInput.select(); }
+  }
+
+  document.getElementById('btnCancel').onclick=()=>{
+    // descartar cambios: volver a pedir el doc actual de Firestore
+    if(docRef){
+      docRef.get().then(snap=>{
+        if(snap.exists && snap.data() && snap.data().data){ const p=fromFirestore(snap.data().data); if(p){ RK=p; ensureShape(); } }
+        closeEdit();
+      }).catch(()=>{ closeEdit(); });
+    } else { RK=JSON.parse(JSON.stringify(DATA)); ensureShape(); closeEdit(); }
+  };
+  document.getElementById('btnSave').onclick=()=>{
+    ['masc','fem'].forEach(g=>cats.forEach(c=>reseed(RK[g][c])));
+    const b=document.getElementById('btnSave'); const t=b.textContent;
+    if(!docRef){ alert('No hay conexión con Firebase.'); return; }
+    b.textContent='Guardando…'; b.disabled=true;
+    docRef.set({ data: toFirestore(RK) }, { merge:true })
+      .then(()=>{ b.textContent='✓ Guardado'; setTimeout(()=>{b.textContent=t;b.disabled=false;},1400); closeEdit(); })
+      .catch(err=>{ console.warn(err); b.textContent=t; b.disabled=false; alert('No se pudo guardar en la base. Revisá las reglas de Firestore.\n\n'+err.message); });
+  };
+  document.getElementById('btnExport').onclick=()=>{
+    const blob=new Blob([JSON.stringify(RK,null,1)],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='ranking_3j_'+new Date().toISOString().slice(0,10)+'.json'; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  };
+
+  /* ---- guardar temporada: archiva una foto del ranking en vivo y avanza a la siguiente (año + trimestre) ---- */
+  const trimPwModal=document.getElementById('trimPwModal'), trimPwInput=document.getElementById('trimPwInput'), trimPwErr=document.getElementById('trimPwErr');
+  const pointerRef = db ? db.collection('ranking').doc('meta') : null;
+  function getNextArchiveTarget(){
+    if(!pointerRef) return Promise.resolve({ year: START_YEAR, idx: START_IDX });
+    return pointerRef.get().then(snap=>{
+      const d = snap.exists && snap.data();
+      const idx = (d && Number.isInteger(d.idx) && d.idx>=0 && d.idx<4) ? d.idx : START_IDX;
+      const year = (d && Number.isInteger(d.year)) ? d.year : START_YEAR;
+      return { year, idx };
+    }).catch(()=>({ year: START_YEAR, idx: START_IDX }));
+  }
+  document.getElementById('btnSaveTemporada').onclick=()=>{
+    getNextArchiveTarget().then(({year, idx})=>{
+      const t = TRIMS[idx];
+      trimPwModal.dataset.targetYear = year;
+      trimPwModal.dataset.targetIdx = idx;
+      document.getElementById('trimPwMsg').textContent = 'Esto guarda una foto del ranking actual en Temporadas · ' + t.label + ' ' + year + ' (' + t.range + ') y después vacía el ranking en vivo para arrancar la próxima temporada de cero. Ingresá la contraseña para confirmar.';
+      trimPwErr.textContent=''; trimPwInput.value=''; trimPwModal.classList.add('on'); setTimeout(()=>trimPwInput.focus(),50);
+    });
+  };
+  document.getElementById('trimPwCancel').onclick=()=>trimPwModal.classList.remove('on');
+  trimPwInput.addEventListener('keydown',e=>{ if(e.key==='Enter') tryTrimPw(); });
+  document.getElementById('trimPwOk').onclick=tryTrimPw;
+  function tryTrimPw(){
+    if(trimPwInput.value!==PASSWORD){ trimPwErr.textContent='Contraseña incorrecta.'; trimPwInput.select(); return; }
+    const year = parseInt(trimPwModal.dataset.targetYear,10) || START_YEAR;
+    const idx = parseInt(trimPwModal.dataset.targetIdx,10);
+    const t = TRIMS[idx] || TRIMS[START_IDX];
+    trimPwModal.classList.remove('on');
+    ['masc','fem'].forEach(g=>cats.forEach(c=>reseed(RK[g][c])));
+    const b=document.getElementById('btnSaveTemporada'); const t0=b.textContent;
+    if(!db){ alert('No hay conexión con Firebase.'); return; }
+    b.textContent='Guardando…'; b.disabled=true;
+    const archiveRef = db.collection('ranking').doc('archive_'+year+'_'+t.id);
+    const nextIdx = (idx+1)%4;
+    const nextYear = (idx===3) ? year+1 : year;
+    archiveRef.set({ data: toFirestore(RK) }, { merge:true })
+      .then(()=> pointerRef ? pointerRef.set({ year: nextYear, idx: nextIdx }, { merge:true }) : null)
+      .then(()=>{
+        RK = buildEmptyRK();
+        return docRef ? docRef.set({ data: toFirestore(RK) }, { merge:true }) : null;
+      })
+      .then(()=>{ render(); b.textContent='✓ Guardado en ' + t.label + ' ' + year + ' · ranking vacío'; setTimeout(()=>{b.textContent=t0;b.disabled=false;},2200); })
+      .catch(err=>{ console.warn(err); b.textContent=t0; b.disabled=false; alert('No se pudo guardar la temporada.\n\n'+err.message); });
+  }
+
+  render();
+</script>
+</body>
+</html>
