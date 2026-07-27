@@ -241,6 +241,7 @@
   const cats = ['4ta/5ta','6ta','7ma','8va'];
   let active = '4ta/5ta';
   let editing = false;
+  const pointerRef = db ? db.collection('ranking').doc('meta') : null;
 
   /* ---- temporadas (archivo por año y trimestre) ---- */
   const TRIMS = [
@@ -300,6 +301,20 @@
           if(parsed){ RK = parsed; ensureShape(); ['masc','fem'].forEach(g=>cats.forEach(c=>{ RK[g][c]=reseed(RK[g][c]); })); if(!editing) render(); }
         }
       }, err=>console.warn('Firestore lectura:', err));
+    }
+    // subtítulo dinámico: refleja el trimestre/año vigente (mismo puntero que usa "Guardar temporada")
+    function setLiveSubLabel(year, idx){
+      const t = TRIMS[idx] || TRIMS[START_IDX];
+      subLabelEl.textContent = 'Acumulado ' + t.label + ' · ' + t.range + ' ' + year;
+    }
+    setLiveSubLabel(START_YEAR, START_IDX); // valor por defecto mientras carga Firestore
+    if(pointerRef){
+      pointerRef.onSnapshot(snap=>{
+        const d = snap.exists && snap.data();
+        const idx = (d && Number.isInteger(d.idx) && d.idx>=0 && d.idx<4) ? d.idx : START_IDX;
+        const year = (d && Number.isInteger(d.year)) ? d.year : START_YEAR;
+        setLiveSubLabel(year, idx);
+      }, err=>console.warn('Firestore lectura (meta):', err));
     }
   }
 
@@ -499,7 +514,6 @@
 
   /* ---- guardar temporada: archiva una foto del ranking en vivo y avanza a la siguiente (año + trimestre) ---- */
   const trimPwModal=document.getElementById('trimPwModal'), trimPwInput=document.getElementById('trimPwInput'), trimPwErr=document.getElementById('trimPwErr');
-  const pointerRef = db ? db.collection('ranking').doc('meta') : null;
   function getNextArchiveTarget(){
     if(!pointerRef) return Promise.resolve({ year: START_YEAR, idx: START_IDX });
     return pointerRef.get().then(snap=>{
